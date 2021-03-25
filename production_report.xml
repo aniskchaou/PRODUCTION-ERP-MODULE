@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+
+		<!-- report OF-->
+		<record id="report_production_of" model="ir.actions.report.xml">
+			<field name="name">Ordre fabrication</field>
+			<field name="auto">True</field>
+			<field name="type">ir.actions.report.xml</field>
+			<field name="model">production.ordre.fabrication</field>
+			<field name="jasper_model_id" ref="production.model_production_ordre_fabrication"/>
+			<field name="report_name">OF</field>
+			<field name="report_type">pdf</field>
+			<field name="jasper_report">True</field>
+			<field name="jasper_output">pdf</field>
+		</record>
+
+		<record id="report_production_of_file" model="ir.actions.report.xml.file">
+			<field name="report_id" ref="report_production_of"/>
+			<field name="file" type="base64" file="production/report/reportOf.jrxml"/>
+			<field name="filename">reportOf.jrxml</field>
+			<field name="default" eval="True"/>
+		</record>
+
+	</data>
+</openerp>
+
+
+

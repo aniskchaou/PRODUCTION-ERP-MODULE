@@ -1,0 +1,330 @@
+/*
+.openerp .tree_activite td{
+
+}
+[data-field="ajouter_article"]
+{
+   width: 110px;
+}
+[data-field="ajouter_OF"]
+{
+   width: 110px;
+}
+[data-id="ajouter_article"]:after
+{
+    content: "Ajouter article";
+}
+[data-id="ajouter_OF"]:after
+{
+    content: "Ajouter OF";
+}
+*/
+[data-id="ajouter_of"]:after
+{
+    content: "Ajouter OF";
+}
+[data-id="ajouter_article"]:after
+{
+    content: "Ajouter article";
+}
+
+
+
+[data-field="creer_of"]
+{
+   width: 20px;
+}
+[data-id="creer_of"]:after
+{
+   content: "OF";
+}
+
+[data-field="creer_bon_reservation"]
+{
+   width: 20px;
+}
+[data-id="creer_bon_reservation"]:after
+{
+   content: "BR";
+}
+
+[data-field="creer_bon_livraison"]
+{
+   width: 20px;
+}
+[data-id="creer_bon_livraison"]:after
+{
+   content: "BL";
+}
+
+
+[data-field="quantite_livre"]
+{
+   background: #D3D1FF;
+}
+
+[data-field="quantite_reserve"]
+{
+   background: #B7E7E5;
+}
+
+[data-field="stock_non_reserve"]
+{
+   background: #FADCDC;
+}
+
+[data-field="stock_reel"]
+{
+   background: #F0A8A8;
+}
+
+[data-field="stock_disponible"]
+{
+   background: #F5BEBE;
+}
+
+[data-field="stock_reserve"]
+{
+   background: #D0CECE;
+}
+
+[data-field="stock_securite"]
+{
+   background: #EDEDED;
+}
+
+
+[data-field="quantite"]
+{
+   background: #A9D0F5;
+}
+
+[data-field="quantite_realiser"]
+{
+   background: #CEE3F6;
+}
+
+[data-field="quantite_stock_article_sortant"]
+{
+   background: #F5BEBE;
+}
+
+.stock_dispo:before {
+        content: "Stock dispo";
+}
+.unite:before {
+        content: "(";
+}
+.unite:after {
+        content: ")";
+}
+
+.oe_activite_vignette {
+  padding: 8px 8px;
+  min-height: 100px;
+}
+.oe_activite_image, .oe_activite_details {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.oe_activite_image {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  overflow: hidden;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  border-collapse: separate;
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -o-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.oe_activite_picture {
+  width: 100px;
+  height: auto;
+  clip: rect(10px, 100px, 110px, 0px);
+}
+
+.oe_activite_details {
+  width: 210px;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #4c4c4c;
+  min-height: 120px;
+}
+
+.oe_activite_details h4 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.oe_activite_details h4 a {
+  color: #4c4c4c;
+}
+
+.oe_activite_details h4 a:hover {
+  text-decoration: underline;
+}
+
+.oe_activite_details ul {
+  margin: 3px 0 5px;
+  padding: 0;
+  list-style: none;
+}
+
+.oe_activite_details li {
+  margin: 2px 0;
+  padding: 0;
+}
+
+.openerp .oe_activite_vignette .oe_followers {
+  width: auto;
+  float: none;
+}
+/* kanban of */
+.oe_of_vignette {
+  padding: 8px 8px;
+  min-height: 100px;
+}
+.oe_of_details , .oe_color_status_details{
+  display: inline-block;
+  vertical-align: top;
+}
+
+.oe_of_details {
+  width: 300px;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #4c4c4c;
+  min-height: 120px;
+}
+
+.oe_of_details h4 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.oe_of_details h4 a {
+  color: #4c4c4c;
+}
+
+.oe_of_details h4 a:hover {
+  text-decoration: underline;
+}
+
+.oe_of_details ul {
+  margin: 3px 0 5px;
+  padding: 0;
+  list-style: none;
+}
+
+.oe_of_details li {
+  margin: 2px 0;
+  padding: 0;
+}
+
+.oe_color_status_details {
+  width: 180px;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #4c4c4c;
+  min-height: 80px;
+}
+
+.oe_kanban_bottom{
+  position: relative;
+  top: 2px;
+  width: 299px;
+  height: 120px;
+}
+.bottom_left, .bottom_right{
+  display: inline-block;
+  vertical-align: bottom;
+}
+.bottom_left{
+  width: 151px;
+}
+.bottom_right {
+  width: 140px;
+}
+
+.radio_horizontal div{
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  height: 16px;
+  margin-right: 20px;
+}
+
+.variables_utiles{
+  border: 1px solid #A4A4A4;
+  width: 284px;
+  display: inline-block;
+  min-height: 80px;
+  margin-left: 3px;
+  vertical-align: top;
+}
+
+.variables_utiles h4{
+    padding-left:30px;
+
+}
+
+.variables_utiles h4 span{
+    background-color: white;
+}
+
+/* Kanban commande */
+
+.oe_cmd_details {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.oe_cmd_details {
+  width: 500px;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #4c4c4c;
+  min-height: 120px;
+}
+
+.oe_cmd_details h4 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.oe_cmd_details h4 a {
+  color: #4c4c4c;
+}
+
+.oe_cmd_details h4 a:hover {
+  text-decoration: underline;
+}
+
+.oe_cmd_details ul {
+  margin: 3px 0 5px;
+  padding: 0;
+  list-style: none;
+}
+
+.oe_cmd_details li {
+  margin: 2px 0;
+  padding: 0;
+}
+
+.table_kanban td{
+    border-bottom: 1px solid #ddd;
+}
+
+.openerp .oe_form_field_progressbar.ui-progressbar .ui-widget-header {
+  /*background: #cccccc url(/web/static/lib/jquery.ui/css/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;*/
+    background: #F78181;
+}
+

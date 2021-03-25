@@ -1,0 +1,270 @@
+<?xml version="1.0" ?>
+
+<openerp>
+	<data>
+
+<!--
+________FORMS__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	vente_client Form 
+-->
+	<record model="ir.ui.view" id="vente_client_form">
+		<field name="name">vente.client.form</field>
+		<field name="model">vente.client</field>
+		<field name="arch" type="xml">
+			<form string="Client">
+				<sheet>
+					<field name="image_medium" widget='image' class="oe_left oe_avatar"/>
+					<div class="oe_title">
+						<h1><label for="code_client"/> <field name="code_client" class="oe_inline"/></h1>
+					</div>
+					<button name="commande_client" type="object" icon="fa-shopping-cart" class="oe_stat_button oe_right">
+						<field name="commande_count" widget="statinfo"/>
+					</button>
+					<group>
+						<group>
+							<field name="nom" class="oe_inline"/>
+							<field name="code_tva" class="oe_inline"/>
+							<field name="responsable" class="oe_inline"/>
+							<field name="taux_tva_id" class="oe_inline"/>
+						</group>
+						<group>
+							<field name="adresse" class="oe_inline"/>
+							<field name="tel" class="oe_inline"/>
+							<field name="fax" class="oe_inline"/>
+							<field name="email" class="oe_inline" widget="email"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	achat_fournisseur Form 
+-->
+	<record model="ir.ui.view" id="achat_fournisseur_form">
+		<field name="name">achat.fournisseur.form</field>
+		<field name="model">achat.fournisseur</field>
+		<field name="arch" type="xml">
+			<form string="Fournisseur">
+				<sheet>
+					<field name="image_medium" widget='image' class="oe_left oe_avatar"/>
+					<div class="oe_title">
+						<h1><label for="code_fournisseur"/> <field name="code_fournisseur" class="oe_inline"/></h1>
+					</div>
+					<button name="commande_fournisseur" type="object" icon="fa-shopping-cart" class="oe_stat_button oe_right">
+						<field name="commande_count" widget="statinfo"/>
+					</button>
+					<group>
+						<group>
+							<field name="nom" class="oe_inline"/>
+							<field name="code_tva" class="oe_inline"/>
+							<field name="responsable" class="oe_inline"/>
+							<field name="active"/>
+						</group>
+						<group>
+							<field name="adresse" class="oe_inline"/>
+							<field name="tel" class="oe_inline"/>
+							<field name="fax" class="oe_inline"/>
+							<field name="email" class="oe_inline" widget="email"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+<!--
+________TREES__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	vente_client Tree 
+-->
+	<record model="ir.ui.view" id="vente_client_tree">
+		<field name="name">vente.client.tree</field>
+		<field name="model">vente.client</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Client" >
+				<field name="code_client"/>
+				<field name="nom"/>
+				<field name="adresse"/>
+				<field name="code_tva"/>
+				<field name="tel"/>
+				<field name="fax"/>
+				<field name="email"/>
+				<field name="responsable"/>
+				<field name="taux_tva_id"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	achat_fournisseur Tree 
+-->
+	<record model="ir.ui.view" id="achat_fournisseur_tree">
+		<field name="name">achat.fournisseur.tree</field>
+		<field name="model">achat.fournisseur</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Fournisseur" >
+				<field name="code_fournisseur"/>
+				<field name="nom"/>
+				<field name="adresse"/>
+				<field name="code_tva"/>
+				<field name="tel"/>
+				<field name="fax"/>
+				<field name="email"/>
+				<field name="responsable"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+<!--
+________SEARCH__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	vente_client search 
+-->
+	<record model="ir.ui.view" id="vente_client_search">
+		<field name="name">vente.client.search</field>
+		<field name="model">vente.client</field>
+		<field name="arch" type="xml">
+			<search string="Client">
+				<field name="code_client" string="Code"/>
+				<field name="nom" string="Nom"/>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	achat_fournisseur search 
+-->
+	<record model="ir.ui.view" id="achat_fournisseur_search">
+		<field name="name">achat.fournisseur.search</field>
+		<field name="model">achat.fournisseur</field>
+		<field name="arch" type="xml">
+			<search string="Fournisseur">
+				<field name="code_fournisseur" string="Code"/>
+				<field name="nom" string="Nom"/>
+				<filter name="filter_see_active" string="Active" domain="[('active', '=',True)]" />
+ 				<filter name="filter_see_inactive" string="Inactive" domain="[('active', '=',False)]" />
+			</search>
+		</field>
+	</record>
+
+<!--
+________KANBAN__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	vente_client kanban 
+-->
+	<record model="ir.ui.view" id="vente_client_kanban_view">
+		<field name="name">vente.client</field>
+		<field name="model">vente.client</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban>
+				<templates>
+					<t t-name="kanban-box">
+						<div class="oe_activite_vignette">
+							<div class="oe_activite_image">
+								<a type="open">
+									<img t-att-src="kanban_image('vente.client', 'image_medium', record.id.value)" 
+										class="oe_activite_picture"/></a>
+							</div>
+							<div class="oe_activite_details">
+								<h4>
+									<a type="open"><field name="code_client"/> : <field name="nom"/></a>
+								</h4>
+								<br/>
+								<ul>
+									<li><b>Adresse : </b><field name="adresse"/></li>
+									<li><b>Tél : </b><field name="tel"/></li>
+									<li><b>Fax : </b><field name="fax"/></li>
+									<li><b>Email : </b><field name="email"/></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+<!-- 
+	achat_fournisseur kanban 
+-->
+	<record model="ir.ui.view" id="achat_fournisseur_kanban_view">
+		<field name="name">achat.fournisseur</field>
+		<field name="model">achat.fournisseur</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban>
+				<templates>
+					<t t-name="kanban-box">
+						<div class="oe_activite_vignette">
+							<div class="oe_activite_image">
+								<a type="open">
+									<img t-att-src="kanban_image('achat.fournisseur', 'image_medium', record.id.value)" 
+										class="oe_activite_picture"/></a>
+							</div>
+							<div class="oe_activite_details">
+								<h4>
+									<a type="open"><field name="code_fournisseur"/> : <field name="nom"/></a>
+								</h4>
+								<br/>
+								<ul>
+									<li><b>Adresse : </b><field name="adresse"/></li>
+									<li><b>Tél : </b><field name="tel"/></li>
+									<li><b>Fax : </b><field name="fax"/></li>
+									<li><b>Email : </b><field name="email"/></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+<!--
+________ACTION__________________________________________________________________________________________
+
+-->
+<!-- vente_client Action -->
+	<record model="ir.actions.act_window" id="action_vente_client">
+		<field name="name">Clients</field>
+		<field name="res_model">vente.client</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="search_view_id" ref="vente_client_search"/>
+	</record>
+<!-- achat_fournisseur Action -->
+	<record model="ir.actions.act_window" id="action_achat_fournisseur">
+		<field name="name">Fournisseurs</field>
+		<field name="res_model">achat.fournisseur</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="search_view_id" ref="achat_fournisseur_search"/>
+	</record>
+
+
+			<menuitem name="Clients" id="client_menu_item" parent="vente_main_menu" 
+				action="action_vente_client" sequence="4"/>
+
+
+			<menuitem name="Fournisseurs" id="achat_fournisseur_menu_item" parent="achat_main_menu" 
+				action="action_achat_fournisseur" sequence="3"/>
+
+    </data>
+</openerp>

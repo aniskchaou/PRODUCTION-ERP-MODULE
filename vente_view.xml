@@ -1,0 +1,497 @@
+<?xml version="1.0" ?>
+
+<openerp>
+	<data>
+
+<!--
+________FORMS__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	taux_tva Form 
+-->
+	<record model="ir.ui.view" id="taux_tva_form">
+		<field name="name">taux.tva.form</field>
+		<field name="model">taux.tva</field>
+		<field name="arch" type="xml">
+			<form string="Taux TVA">
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="taux_tva"/> <field name="taux_tva" class="oe_inline"/></h1>
+						<h3>( <field name="default"/> est la valeur par défaut?)</h3>
+					</div>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	production_commande Form 
+-->
+	<record model="ir.ui.view" id="production_commande_form">
+		<field name="name">production.commande.form</field>
+		<field name="model">production.commande</field>
+		<field name="arch" type="xml">
+			<form string="Commande">
+				<field name="id" invisible="1"/>
+				<header>
+ 					<!--<button name="action_demarrer_commande" string="Démarrer" states="planifie" 
+							class="oe_highlight" type="object"/>
+					<button name="action_terminer_commande" string="Terminer" states="demarre" type="object"
+							confirm="Voulez vous terminer cette commande?" class="oe_highlight"/>-->
+
+							<button name="action_confirmer_commande" string="Confirmer" states="nonconfirme" type="object"
+							confirm="Voulez vous confirmer cette commande?" class="oe_highlight"/>
+
+					<field name="state"  widget="statusbar" statusbar_visible="nonconfirme,nonplanifie,planifie,demarre,termine"/>
+				</header>
+
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="num_commande"/> <field name="num_commande" class="oe_inline"/></h1>
+					</div>
+					<!--	<div class="oe_right oe_button_box">
+						<button name="creer_of" type="object" icon="fa-tasks" string="Créer OF" class="oe_stat_button"/>
+
+					</div>-->
+					<group>
+						<group>
+							<field name="client_id"/>
+						</group>
+						<group>
+							<field name="date_creation"/>
+							<field name="date_limit_cmd" />
+						</group>
+					</group>
+					<group string="Articles">
+						<field name="article_commande_ids" nolabel="1" context="{'default_date_limit': date_limit_cmd}">
+							<tree editable="bottom" default_order="date_limit">
+								<button name="creer_of" type="object" icon="gtk-new" 
+										string="Créer OF"
+										groups="production.group_production"/>
+								<button name="creer_bon_reservation" type="object" icon="STOCK_INDEX" 
+                                    	string="Créer bon de réservation"
+										groups="production.group_vente"/>
+								<button name="creer_bon_livraison" type="object" icon="STOCK_REMOVE" 
+                                    	string="Créer bon de livraison"
+										groups="production.group_vente"/>
+								<field name="article_id"/>
+								<field name="quantite"/>
+								<field name="unite"/>
+								<field name="date_limit"/>
+								<field name="quantite_livre"/>
+								<field name="quantite_reserve"/>
+								<field name="stock_non_reserve"/>
+								<field name="progress" widget="progressbar"/>
+								</tree>
+						</field>
+					</group>
+                    <notebook>
+                        <page string="Ordres de fabrication" 
+							groups="production.group_production"
+							attrs="{'invisible': [('state' , '=' , 'planifie')]}">
+					        <field name="of_ids" nolabel="1">
+						        <tree create="false" default_order="date_fin"
+							        colors="blue:state in ('planifie');red:state in ('demarre');black:state in ('termine');">
+							        <button name="open_line" type="object" string="ouvrir ligne" icon="gtk-open"/>
+							        <field name="code_of"/>
+							        <field name="article_sortant"/>
+							        <field name="quantite"/>
+							        <field name="code_machine"/>
+							        <field name="code_operateur"/>
+							        <field name="date_fin"/>
+							        <field name="state" invisible="1"/>
+							        <button name="ajouter_bon_entree_fabrication" type="object" icon="gtk-add"
+								        string="Bon entree fabrication" states="demarre"/>
+							        <button name="action_demarrer_fabrication" states="planifie" string="Démarrer"
+								        class="oe_highlight" type="object" icon="STOCK_GO_FORWARD"/>
+							        <button name="action_terminer_fabrication" states="demarre" string="Terminer"
+								        class="oe_highlight" type="object" icon="STOCK_APPLY"/>
+							        <button name="action_arreter_fabrication" states="demarre" string="Arrêter"
+								        class="oe_highlight" type="object" icon="STOCK_CANCEL"
+								        confirm="Voulez vous arrêter cette OF?"/>
+							        <button name="%(production.report_production_of)d" type="action" icon="gtk-print" 
+								        string="Imprimer"/>
+							        <field name="progress" widget="progressbar"/>
+						        </tree>
+					        </field>
+                        </page>
+                        <page string="Bons de réservation" 
+							groups="production.group_vente"
+							attrs="{'invisible': [('state' , '=' , 'planifie')]}">
+                            <field name="bon_reservation_ids">
+                                <tree create="false">
+				                    <field name="code_bon"/>
+				                    <field name="date_bon"/>
+				                    <field name="article_id"/>
+				                    <field name="quantite"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Bons de livraison" 
+							groups="production.group_vente"
+							attrs="{'invisible': [('state' , '=' , 'planifie')]}">
+                            <field name="bon_livraison_ids">
+                                <tree create="false">
+				                    <field name="code_bon"/>
+				                    <field name="date_bon"/>
+				                    <field name="article_id"/>
+				                    <field name="quantite"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	bon_reservation Form 
+-->
+	<record model="ir.ui.view" id="bon_reservation_form">
+		<field name="name">bon.reservation.form</field>
+		<field name="model">bon.reservation</field>
+		<field name="arch" type="xml">
+			<form string="Bon de Réservation">
+				<sheet>
+                    <div style="text-align: center;">
+                        <h1>Bon de réservation</h1>
+                    </div>
+                    <hr/>
+					<div class="oe_title">
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="commande_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="article_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="quantite"/>
+						</group>
+						<group>
+							<field name="client_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="date_bon"/>
+                            <field name="stock_disponible"/>
+                            <field name="stock_non_reserve"/>
+						</group>
+					</group>
+					<label for="progress_reserve_commande"/>
+					<div class="oe_right">
+						<h4>Réservé / Commandé : (<field name="quantite_reserve" class="oe_inline"/> / 
+												<field name="quantite_commande" class="oe_inline"/> 
+												<field name="unite" class="oe_inline"/>)</h4>
+					</div>
+					<field name="progress_reserve_commande" widget="progressbar"/>
+
+					<label for="remarque"/>
+					<field name="remarque"/>
+				</sheet>
+
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	bon_livraison Form 
+-->
+	<record model="ir.ui.view" id="bon_livraison_form">
+		<field name="name">bon.livraison.form</field>
+		<field name="model">bon.livraison</field>
+		<field name="arch" type="xml">
+			<form string="Bon de Livraison">
+				<sheet>
+                    <div style="text-align: center;">
+                        <h1>Bon de livraison</h1>
+                    </div>
+                    <hr/>
+					<div class="oe_title">
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="commande_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="article_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="quantite"/>
+						</group>
+						<group>
+							<field name="client_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="date_bon"/>
+                            <field name="stock_disponible"/>
+                            <field name="stock_non_reserve"/>
+						</group>
+					</group>
+
+					<label for="progress_reserve_commande"/>
+					<div class="oe_right">
+						<h4>Réservé / Commandé : (<field name="quantite_reserve" class="oe_inline"/> / 
+												<field name="quantite_commande" class="oe_inline"/> 
+												<field name="unite" class="oe_inline"/>)</h4>
+					</div>
+					<field name="progress_reserve_commande" widget="progressbar"/>
+                    <separator/>
+					<label for="progress_livre_commande"/>
+					<div class="oe_right">
+						<h4>Livré / Commandé : (<field name="quantite_livre" class="oe_inline"/> / 
+												<field name="quantite_commande2" class="oe_inline"/> 
+												<field name="unite" class="oe_inline"/>)</h4>
+					</div>
+					<field name="progress_livre_commande" widget="progressbar"/>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!--
+________TREES__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	taux_tva Tree 
+-->
+	<record model="ir.ui.view" id="taux_tva_tree">
+		<field name="name">taux.tva.tree</field>
+		<field name="model">taux.tva</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Taux TVA" >
+				<field name="taux_tva"/>
+				<field name="default"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	production_commande Tree 
+-->
+	<record model="ir.ui.view" id="production_commande_tree">
+		<field name="name">production.commande.tree</field>
+		<field name="model">production.commande</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree colors="green:state in ('nonplanifie');blue:state in ('planifie');red:state in ('demarre');black:state in ('termine');" string="Commande">
+				<field name="num_commande"/>
+				<field name="client_id"/>
+				<field name="date_creation"/>
+				<field name="date_limit_cmd"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	bon_reservation Tree 
+-->
+	<record model="ir.ui.view" id="bon_reservation_tree">
+		<field name="name">bon.reservation.tree</field>
+		<field name="model">bon.reservation</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Bon de Réservation" >
+				<field name="code_bon"/>
+				<field name="date_bon"/>
+				<field name="client_id"/>
+				<field name="commande_id"/>
+				<field name="article_id"/>
+				<field name="quantite"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	bon_livraison Tree 
+-->
+	<record model="ir.ui.view" id="bon_livraison_tree">
+		<field name="name">bon.livraison.tree</field>
+		<field name="model">bon.livraison</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Bon de Livraison" >
+				<field name="code_bon"/>
+				<field name="date_bon"/>
+				<field name="client_id"/>
+				<field name="commande_id"/>
+				<field name="article_id"/>
+				<field name="quantite"/>
+			</tree>
+		</field>
+	</record>
+
+<!--
+________SEARCH__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	production_commande search 
+-->
+	<record model="ir.ui.view" id="production_commande_search">
+		<field name="name">production.commande.search</field>
+		<field name="model">production.commande</field>
+		<field name="arch" type="xml">
+			<search string="Commande">
+				<field name="num_commande" string="Num commande"/>
+				<filter string="Démarré" name="demarre" domain="[('state', '=', 'demarre')]"/>
+				<filter string="Planifié" name="planifie" domain="[('state', '=', 'planifie')]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Client" domain="[]" context="{'group_by':'client_id'}"/>
+				</group>
+ 			</search>
+		</field>
+	</record>
+
+<!-- 
+	bon_reservation search 
+-->
+	<record model="ir.ui.view" id="bon_reservation_search">
+		<field name="name">bon.reservation.search</field>
+		<field name="model">bon.reservation</field>
+		<field name="arch" type="xml">
+			<search string="Bon réservation">
+				<field name="commande_id" string="Code commande" filter_domain="[('commande_id.code_commande', 'ilike', self)]"/>
+				<filter string="Commande démarré" name="res_demarre" domain="[('commande_id.state', '=', 'demarre')]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Commande" domain="[]" context="{'group_by':'commande_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	bon_livraison search 
+-->
+	<record model="ir.ui.view" id="bon_livraison_search">
+		<field name="name">bon.livraison.search</field>
+		<field name="model">bon.livraison</field>
+		<field name="arch" type="xml">
+			<search string="Bon livraison">
+				<field name="commande_id" string="Code commande" filter_domain="[('commande_id.code_commande', 'ilike', self)]"/>
+				<filter string="Commande démarré" name="liv_demarre" domain="[('commande_id.state', '=', 'demarre')]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Commande" domain="[]" context="{'group_by':'commande_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!--
+________KANBAN__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	production_commande kanban 
+-->
+	<record model="ir.ui.view" id="production_commande_kanban_view">
+		<field name="name">production.commande</field>
+		<field name="model">production.commande</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban class="oe_background_grey" default_order="date_limit_cmd">
+				<field name="member_color"/>
+				<field name="article_commande_ids"/>
+				<templates>
+					<t t-name="kanban-box">
+						<div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.member_color.raw_value)} oe_kanban_card oe_kanban_global_click">
+							<div class="oe_cmd_details">
+								<table width="100%">
+									<tr>
+										<td><h4>Commande : <a type="open"><field name="num_commande"/></a></h4></td>
+										<td><u><field name="state"/></u></td>
+										<td style="text-align: right;"><b>pour : </b><field name="date_limit_cmd"/></td>
+									</tr>
+									<tr>
+										<td><h4>Client <a type="open"><field name="client_id"/></a></h4></td>
+									</tr>
+								</table>
+								<br/>
+								<table width="100%" class="table_kanban">
+									<tr>
+										<td><b>Article</b></td>
+										<td><b>Quantité</b></td>
+										<td><b>Unité</b></td>
+										<td><b>Quantité livré</b></td>
+										<td style="text-align: right;"><b>Date limite</b></td>
+									</tr>
+									<t t-foreach="record.article_commande_ids.raw_value" t-as="commande">
+										<tr>
+											<td><t t-esc="commande.article_id"/></td>
+											<td><t t-esc="commande.quantite"/></td>
+											<td><t t-esc="commande.unite"/></td>
+											<td><t t-esc="commande.quantite_livre"/>
+												( <u><b><t t-esc="commande.progress"/> % </b></u>)</td>
+											<td style="text-align: right;"><t t-esc="commande.date_limit"/></td>
+										</tr>
+									</t>
+								</table>                            
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+<!--
+________ACTION__________________________________________________________________________________________
+
+-->
+
+<!-- taux_tva Action -->
+	<record model="ir.actions.act_window" id="action_taux_tva">
+		<field name="name">Taux TVA</field>
+		<field name="res_model">taux.tva</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+<!-- production_commande Action -->
+    <record model="ir.actions.act_window" id="action_production_commande">
+        <field name="name">Commande</field>
+        <field name="res_model">production.commande</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="production_commande_search"/>
+        <field name="context">{'search_default_planifie': 1, 'search_default_demarre': 1}</field>
+    </record>
+
+<!-- bon_reservation Action -->
+	<record model="ir.actions.act_window" id="action_bon_reservation">
+		<field name="name">Bons de Réservation</field>
+		<field name="res_model">bon.reservation</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_res_demarre': 1}</field>
+	</record>
+
+<!-- bon_livraison Action -->
+	<record model="ir.actions.act_window" id="action_bon_livraison">
+		<field name="name">Bons de Livraison</field>
+		<field name="res_model">bon.livraison</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_liv_demarre': 1}</field>
+	</record>
+
+	<menuitem name="Ventes" id="vente_menu" groups="production.group_vente"/>
+
+		<menuitem name="Ventes" id="vente_main_menu" parent="vente_menu" sequence="1"/>
+			<menuitem name="Commandes" id="vente_commande_menu_item" parent="vente_main_menu" 
+				action="production.action_production_commande" sequence="1"/>
+			<menuitem name="Bons de Réservation" id="bon_reservation_menu_item" parent="vente_main_menu" 
+				action="action_bon_reservation" sequence="2"/>
+			<menuitem name="Bons de Livraison" id="bon_livraison_menu_item" parent="vente_main_menu" 
+				action="action_bon_livraison" sequence="3"/>
+
+
+		<menuitem name="Configuration" id="configuration_vente_main_menu" parent="vente_menu"/>
+			<menuitem name="TVA" id="tva_menu_item" parent="configuration_vente_main_menu" 
+				action="action_taux_tva" sequence="40"/>
+
+    </data>
+</openerp>

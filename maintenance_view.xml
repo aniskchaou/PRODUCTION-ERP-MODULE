@@ -1,0 +1,889 @@
+<?xml version="1.0" ?>
+
+<openerp>
+	<data>
+<!--
+________FORMS__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	maintenance_piece Form 
+-->
+	<record model="ir.ui.view" id="maintenance_piece_form">
+		<field name="name">maintenance.piece.form</field>
+		<field name="model">maintenance.piece</field>
+		<field name="arch" type="xml">
+			<form string="Piece">
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="code_piece"/> <field name="code_piece" class="oe_inline"/></h1>
+					</div>
+					<div class="oe_right oe_button_box">
+						<button name="ajouter_bon_entree_piece" type="object" icon="fa-cogs" class="oe_stat_button">
+							<field name="bon_entree_piece_count" widget="statinfo"/>
+						</button>
+					</div>
+					<separator/>
+					<group>
+						<group>
+							<field name="name"/>
+							<field name="unite" class="oe_inline"/>
+							<field name="prix"/>
+						</group>
+						<group>
+							<label for="quantite_stock"/>
+							<div>
+								<field name="quantite_stock" class="oe_inline"/>
+								<button name="%(action_view_change_piece_qte)d" string="⇒ Mêtre à jour" type="action" 		
+										class="oe_link"/>
+							</div>
+							<field name="stock_min"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Bon entrée pièce de rechange">
+							<field name="bon_entree_piece_ids">
+								<tree create="false">
+									<field name="code_bon"/>
+									<field name="quantite"/>
+									<field name="unite"/>
+									<field name="date"/>
+									<field name="fournisseur_id"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	bon_entree_piece Form 
+-->
+	<record model="ir.ui.view" id="bon_entree_piece_form">
+		<field name="name">bon.entree.piece.form</field>
+		<field name="model">bon.entree.piece</field>
+		<field name="arch" type="xml">
+			<form string="Bon entrée Pièce">
+				<sheet>
+					<div style="text-align: center;">
+						<h1>Bon entrée pièce de rechange</h1>
+					</div>
+					<hr/>
+					<div class="oe_title">
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="piece_id"/>
+							<field name="quantite"/>
+							<field name="unite"/>
+						</group>
+						<group>
+							<field name="date"/>
+							<field name="fournisseur_id"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_panne Form 
+-->
+	<record model="ir.ui.view" id="maintenance_panne_form">
+		<field name="name">maintenance.panne.form</field>
+		<field name="model">maintenance.panne</field>
+		<field name="arch" type="xml">
+			<form string="Panne">
+				<sheet>
+					<label for="name"/>
+					<field name="name"/>
+					<label for="description"/>
+					<field name="description"/>
+					<label for="occurrence_panne"/>
+					<field name="occurrence_panne"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+<!-- 
+	maintenance_demande_intervention Form 
+-->
+	<record model="ir.ui.view" id="maintenance_demande_intervention_simple_form">
+		<field name="name">maintenance.demande.intervention.form</field>
+		<field name="model">maintenance.demande.intervention</field>
+		<field name="arch" type="xml">
+			<form string="Demande d'intervention">
+				<header>
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="reference_intervention"/>
+							<field name="reference_intervention" class="oe_inline"/></h1>
+					</div>
+					<group col='5'>
+						<group colspan="3">
+							<field name="demandeur"/>
+							<field name="machine_id"/>
+							<field name="panne_id"/>
+						</group>
+						<group colspan="2">
+							<field name="date_demande"/>
+							<field name="priorite"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Remarque">
+							<label for="remarque"/>
+							<field name="remarque"/>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_demande_intervention Form 
+-->
+	<record model="ir.ui.view" id="maintenance_demande_intervention_form">
+		<field name="name">maintenance.demande.intervention.form</field>
+		<field name="model">maintenance.demande.intervention</field>
+		<field name="arch" type="xml">
+			<form string="Demande d'intervention">
+				<header>
+<!--
+					<button name="action_planifier" string="Planifier" states="non_planifie"
+						type="object" class="fa fa-chevron-right"/>
+-->
+					<button name="%(action_view_planifier_intervention)d" string="Planifier" type="action"
+						states="non_planifie" class="fa fa-chevron-right"/>
+<!--
+					<button name="action_traiter" string="Traiter" states="planifie"
+						type="object" class="fa fa-chevron-right"/>
+-->
+					<button name="%(action_view_traiter_intervention_interne)d" string="Traiter" type="action"
+						class="fa fa-chevron-right" 
+						context="{'demande_intervention_id': active_id, 'machine_id': machine_id}"
+						attrs="{'invisible': ['|', ('type_prestataire', '!=', 'externe'), ('state', '!=', 'planifie')]}"/>
+
+					<button name="%(action_view_traiter_intervention_externe)d" string="Traiter" type="action"
+						class="fa fa-chevron-right" 
+						context="{'demande_intervention_id': active_id, 'machine_id': machine_id}"
+						attrs="{'invisible': ['|', ('type_prestataire', '!=', 'interne'), ('state', '!=', 'planifie')]}"/>
+<!--
+					<button name="action_evaluer" string="Evaluer" states="traite"
+						type="object" class="fa fa-chevron-right"/>
+-->
+					<button name="evaluer_prestataire" type="object" string="Evaluer prestataire"
+						class="fa fa-star-half-o" 
+						attrs="{'invisible': ['|',('type_prestataire', '!=', 'externe'), ('state', '!=', 'traite')]}"/>
+					<button name="evaluer_operateur" type="object" string="Evaluer opérateur"
+						class="fa fa-star-half-o" 
+						attrs="{'invisible': ['|',('type_prestataire', '!=', 'interne'), ('state', '!=', 'traite')]}"/>
+
+					<button name="action_cloturer" string="Cloturer" states="evalue"
+						type="object" icon="gtk-apply"/>
+					<button name="action_annuler" string="Annuler" states="non_planifie,planifie"
+						type="object" icon="gtk-cancel"/>
+					<field name="state" widget="statusbar" statusbar_visible="non_planifie,planifie,traite,evalue,cloture"/>
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="reference_intervention"/>
+							<field name="reference_intervention" class="oe_inline"/></h1>
+					</div>
+					<field name="type_intervalle_rel" invisible="1"/>
+					<group col='5'>
+						<group colspan="3">
+							<field name="demandeur" 
+								attrs="{'invisible': [('maintenance_preventive_id', '!=', False)]}"/>
+							<field name="maintenance_preventive_id" 
+								attrs="{'invisible': [('maintenance_preventive_id', '=', False)]}"/>
+							<field name="machine_id"/>
+							<field name="panne_id"/>
+						</group>
+						<group colspan="2">
+							<field name="date_demande"/>
+							<field name="priorite"/>
+							<field name="jours_restants" attrs="{'invisible': [('type_intervalle_rel', '!=', 'intervalle')]}"/>
+							<field name="duree_restants" attrs="{'invisible': [('type_intervalle_rel', '!=', 'duree')]}"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Evaluation" attrs="{'invisible':[('state', 'in', ['non_planifie','planifie','traite'])]}">
+							<field name="date_evaluation"/>
+						</page>
+						<page string="Traitement" attrs="{'invisible':[('state', 'in', ['non_planifie', 'planifie'])]}">
+							<group>
+								<group>
+									<field name="date_entretien"/>
+									<field name="date_fin_entretien"/>
+								</group>
+								<group>
+									<field name="heure_travaillee" 
+										attrs="{'invisible': [('type_prestataire', '!=', 'interne')]}"/>
+									<field name="cout_horaire"  invisible="1"/>
+									<field name="cout"
+										attrs="{'invisible': [('type_prestataire', '!=', 'interne')]}"/>
+									<field name="montant_facture" 
+										attrs="{'invisible': [('type_prestataire', '!=', 'externe')]}"/>
+									<field name="temp_arret"/>
+								</group>
+							</group>
+							<notebook>
+								<page string="Traitement effectué">
+									<field name="traitement_effectue"/>
+								</page>
+								<page string="Pièces de rechange">
+									<field name="demande_intervention_piece_rel_ids">
+										<tree editable="bottom">
+											<field name="piece_id"/>
+											<field name="quantite"/>
+											<field name="unite"/>
+											<field name="date"/>
+											<field name="prix"/>
+										</tree>
+									</field>
+								</page>
+							</notebook>
+						</page>
+						<page string="Planification" attrs="{'invisible':[('state', 'in', ['non_planifie'])]}">
+							<group>
+								<group>
+									<field name="type_prestataire"/>
+<!--
+									<field name="prestataire_id" domain="[('type_prestataire', '=', type_prestataire)]"/>
+-->
+									<field name="prestataire_id" 
+										attrs="{'invisible': [('type_prestataire', '=', 'interne')]}"/>
+									<field name="operateur_id"
+										attrs="{'invisible': [('type_prestataire', '=', 'externe')]}"/>
+								</group>
+								<group>
+									<field name="date_entretien_planifie"/>
+<!--
+									<field name="duree_planifie" attrs="{'invisible': [('type_intervalle_rel', '!=','duree')]}"/>
+-->
+									<field name="duree_planifie" invisible="1"/>
+								</group>
+							</group>
+						</page>
+						<page string="Remarque">
+							<label for="remarque"/>
+							<field name="remarque"/>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_prestataire Form 
+-->
+	<record model="ir.ui.view" id="maintenance_prestataire_form">
+		<field name="name">maintenance.prestataire.form</field>
+		<field name="model">maintenance.prestataire</field>
+		<field name="arch" type="xml">
+			<form string="Prestataire">
+				<sheet>
+					<group>
+						<field name="name"/>
+						<field name="note_moyenne"/>
+					</group>
+					<label for="evaluation_ids"/>
+					<field name="evaluation_ids"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_evaluation_prestataire Form 
+-->
+	<record model="ir.ui.view" id="maintenance_evaluation_prestataire_form">
+		<field name="name">maintenance.evaluation.prestataire.form</field>
+		<field name="model">maintenance.evaluation.prestataire</field>
+		<field name="arch" type="xml">
+			<form string="Evaluation des prestataires">
+				<sheet>
+					<group>
+						<field name="maintenance_prestataire_id" readonly="1"/>
+						<field name="demande_intervention_id"/>
+						<field name="qualite_service" widget="radio"/>
+						<field name="delai_prevu"/>
+						<field name="delai_reel"/>
+						<field name="ecart"/>
+						<field name="note"/>
+						<field name="decision"/>
+					</group>
+				</sheet>
+				<footer> 
+					<button name="write" type="object" string="Enregistrer"/> or 
+					<button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+				</footer>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_evaluation_operateur Form 
+-->
+	<record model="ir.ui.view" id="maintenance_evaluation_operateur_form">
+		<field name="name">maintenance.evaluation.operateur.form</field>
+		<field name="model">maintenance.evaluation.operateur</field>
+		<field name="arch" type="xml">
+			<form string="Evaluation des operateurs">
+				<sheet>
+					<group>
+						<field name="production_operateur_id" readonly="1"/>
+						<field name="qualite_service" widget="priority"/>
+						<field name="date_evaluation"/>
+					</group>
+				</sheet>
+				<footer> 
+					<button name="write" type="object" string="Enregistrer"/> or 
+					<button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+				</footer>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_preventive Form 
+-->
+	<record model="ir.ui.view" id="maintenance_preventive_form">
+		<field name="name">maintenance.preventive.form</field>
+		<field name="model">maintenance.preventive</field>
+		<field name="arch" type="xml">
+			<form string="Maintenance préventive">
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="reference_maintenance_preventive"/> 
+							<field name="reference_maintenance_preventive" class="oe_inline"/></h1>
+					</div>
+					<separator/>
+					<group>
+						<field name="machine_id"/>
+						<field name="type_intervalle"/>
+						<field name="intervalle" attrs="{'invisible': [('type_intervalle', '!=', 'intervalle')]}"/>
+						<field name="duree"	attrs="{'invisible': [('type_intervalle', '!=', 'duree')]}"/>
+						<field name="commence_le"/>
+						<field name="panne_id"/>
+					</group>
+					<notebook>
+						<page string="Demandes d'intervention">
+							<field name="demande_intervention_ids">
+								<tree create="false">
+									<field name="reference_intervention"/>
+									<field name="date_demande"/>
+									<field name="state"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!--
+________TREES__________________________________________________________________________________________
+
+-->
+
+
+<!-- 
+	maintenance_piece Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_piece_tree">
+		<field name="name">maintenance.piece.tree</field>
+		<field name="model">maintenance.piece</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Piece" >
+				<field name="code_piece"/>
+				<field name="name"/>
+				<field name="quantite_stock"/>
+				<field name="unite"/>
+				<field name="prix"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	bon_entree_piece Tree 
+-->
+	<record model="ir.ui.view" id="bon_entree_piece_tree">
+		<field name="name">bon.entree.piece.tree</field>
+		<field name="model">bon.entree.piece</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Bon entrée Pièce" >
+				<field name="code_bon"/>
+				<field name="piece_id"/>
+				<field name="quantite"/>
+				<field name="unite"/>
+				<field name="date"/>
+				<field name="fournisseur_id"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_panne Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_panne_tree">
+		<field name="name">maintenance.panne.tree</field>
+		<field name="model">maintenance.panne</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Panne">
+				<field name="name"/>
+				<field name="description"/>
+				<field name="occurrence_panne"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_demande_intervention Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_demande_intervention_tree">
+		<field name="name">maintenance.demande.intervention.tree</field>
+		<field name="model">maintenance.demande.intervention</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Demande d'intervention"
+				colors="Green:priorite == 'basse';orange:priorite == 'normal';red:priorite == 'urgent'">
+				<field name="reference_intervention"/>
+				<field name="demandeur"/>
+				<field name="maintenance_preventive_id"/>
+				<field name="machine_id"/>
+				<field name="panne_id"/>
+				<field name="priorite"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="maintenance_demande_intervention2_tree">
+		<field name="name">maintenance.demande.intervention.tree</field>
+		<field name="model">maintenance.demande.intervention</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Demande d'intervention" create="false"
+				colors="Green:delai == 'vert';orange:delai == 'orange';red:delai == 'rouge'">
+				<field name="reference_intervention"/>
+				<field name="demandeur"/>
+				<field name="maintenance_preventive_id"/>
+				<field name="machine_id"/>
+				<field name="panne_id"/>
+				<field name="priorite"/>
+				<field name="cout" sum="Cout total"/>
+				<field name="state"/>
+				<field name="date_entretien_planifie"/>
+				<field name="delai" invisible="1"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_prestataire Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_prestataire_tree">
+		<field name="name">maintenance.prestataire.tree</field>
+		<field name="model">maintenance.prestataire</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Prestataire">
+				<field name="name"/>
+<!--
+				<field name="type_prestataire"/>
+-->
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_evaluation_prestataire Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_evaluation_prestataire_tree">
+		<field name="name">maintenance.evaluation.prestataire.tree</field>
+		<field name="model">maintenance.evaluation.prestataire</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Evaluation des prestataires" create="false">
+				<field name="demande_intervention_id"/>
+				<field name="qualite_service"/>
+				<field name="delai_prevu"/>
+				<field name="delai_reel"/>
+				<field name="ecart"/>
+				<field name="note"/>
+				<field name="decision"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_evaluation_operateur Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_evaluation_operateur_tree">
+		<field name="name">maintenance.evaluation.operateur.tree</field>
+		<field name="model">maintenance.evaluation.operateur</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Evaluation des operateurs" create="false">
+				<field name="qualite_service"/>
+				<field name="date_evaluation"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_preventive Tree 
+-->
+	<record model="ir.ui.view" id="maintenance_preventive_tree">
+		<field name="name">maintenance.preventive.tree</field>
+		<field name="model">maintenance.preventive</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Maintenance préventive">
+				<field name="reference_maintenance_preventive"/>
+				<field name="machine_id"/>
+				<field name="type_intervalle"/>
+				<field name="panne_id"/>
+			</tree>
+		</field>
+	</record>
+
+<!--
+________CALANDAR__________________________________________________________________________________________
+
+-->
+<!-- 
+	maintenance_demande_intervention calendar 
+-->
+	<record model="ir.ui.view" id="maintenance_demande_intervention_calendar">
+		<field name="name">maintenance.demande.intervention.calendar</field>
+		<field name="model">maintenance.demande.intervention</field>
+		<field eval="2" name="priority"/>
+		<field name="arch" type="xml">
+			<calendar color="machine_id" date_start="date_entretien_planifie" date_stop="date_entretien_planifie" 
+				string="Demande d'intervention">
+				<field name="machine_id"/>
+				<field name="panne_id"/>
+			</calendar>
+		</field>
+	</record>
+
+<!--
+________SEARCH__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	maintenance_preventive search 
+-->
+	<record model="ir.ui.view" id="maintenance_preventive_search">
+		<field name="name">maintenance.preventive.search</field>
+		<field name="model">maintenance.preventive</field>
+		<field name="arch" type="xml">
+			<search string="Maintenance préventive">
+				<filter string="MP conditionnelle" name="conditionnelle" domain="[('type_intervalle', '=', 'intervalle')]"/>
+				<filter string="MP systematique" name="systematique" domain="[('type_intervalle', '=', 'duree')]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Machine" domain="[]" context="{'group_by':'machine_id'}"/>
+					<filter string="Panne" domain="[]" context="{'group_by':'panne_id'}"/>
+				</group>
+ 			</search>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_panne search 
+-->
+	<record model="ir.ui.view" id="maintenance_panne_search">
+		<field name="name">maintenance.panne.search</field>
+		<field name="model">maintenance.panne</field>
+		<field name="arch" type="xml">
+			<search string="Panne">
+				<filter name="panne_courante" string="Panne courante" domain="[('panne_courante' , '=' , True)]" />
+				<field name="name"/>
+				<group expand="0" string="Regrouper par">
+					<filter string="Panne"  domain="[]" context="{'group_by':'name'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	maintenance_prestataire search 
+-->
+<!--
+	<record model="ir.ui.view" id="maintenance_prestataire_search">
+		<field name="name">maintenance.prestataire.search</field>
+		<field name="model">maintenance.prestataire</field>
+		<field name="arch" type="xml">
+			<search string="Prestataire">
+				<filter string="Prestataire interne" name="interne" domain="[('type_prestataire', '=', 'interne')]"/>
+				<filter string="Prestataire externe" name="externe" domain="[('type_prestataire', '=', 'externe')]"/>
+ 			</search>
+		</field>
+	</record>
+-->
+<!-- 
+	maintenance_demande_intervention search 
+-->
+	<record model="ir.ui.view" id="maintenance_demande_intervention_search">
+		<field name="name">maintenance.demande.intervention.search</field>
+		<field name="model">maintenance.demande.intervention</field>
+		<field name="arch" type="xml">
+			<search string="Demande d\'intervention">
+				<field name="date_entretien"/>
+				<group expand="0" string="Grouper par ...">
+					<filter name="groupby_annee" context="{'group_by': 'date_entretien:year'}" string="Année"
+						help="Group par année" />
+					<filter name="groupby_mois" context="{'group_by': 'date_entretien:month'}" string="Mois"
+						help="Group par mois" />
+				</group>
+				<filter string="Année actuelle" name="current_year" domain="[('date_entretien','&lt;=',
+						time.strftime('%%Y-12-31')),('date_entretien','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+				<filter string="Préviseur préventif" name="previseur_preventif" 
+					domain="[('maintenance_preventive_id', '!=', False)]"/>
+				<filter string="Préviseur corrective" name="previseur_corrective" 
+					domain="[('maintenance_preventive_id', '=', False)]"/>
+			</search>
+		</field>
+	</record>
+
+<!--
+________KANBAN__________________________________________________________________________________________
+
+-->
+
+<!--
+________GRAPH__________________________________________________________________________________________
+
+-->
+<!--
+	maintenance_panne graph
+-->
+	<record id="maintenance_panne_graph" model="ir.ui.view">
+		<field name="name">maintenance.panne.graph</field>
+		<field name="model">maintenance.panne</field>
+		<field name="arch" type="xml">
+			<graph string="Nbr d\'occurence de panne" type="pie" stacked="False">
+				<field name="name" type="row"/>
+				<field name="occurrence_panne" type="measure"/>
+			</graph>
+		</field>
+	</record>
+<!--
+________ACTION__________________________________________________________________________________________
+
+-->
+<!-- maintenance_piece Action -->
+	<record model="ir.actions.act_window" id="action_maintenance_piece">
+		<field name="name">Piece</field>
+		<field name="res_model">maintenance.piece</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+<!-- bon_entree_piece Action -->
+	<record model="ir.actions.act_window" id="action_bon_entree_piece">
+		<field name="name">Bon entree Piece</field>
+		<field name="res_model">bon.entree.piece</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+<!-- maintenance_panne Action -->
+	<record model="ir.actions.act_window" id="action_maintenance_panne">
+		<field name="name">Panne</field>
+		<field name="res_model">maintenance.panne</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form,graph</field>
+	</record>
+
+<!-- maintenance_demande_intervention Action -->
+	<record model="ir.actions.act_window" id="action_demande_intervention_simple">
+		<field name="name">Demande d'intervention</field>
+		<field name="res_model">maintenance.demande.intervention</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('state', '=', 'non_planifie')]</field>
+	</record>
+	<record model="ir.actions.act_window" id="action_demande_intervention">
+		<field name="name">Demande d'intervention</field>
+		<field name="res_model">maintenance.demande.intervention</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('state', '=', 'non_planifie')]</field>
+	</record>
+	<record model="ir.actions.act_window" id="action_demande_planifie">
+		<field name="name">Demande d'intervention</field>
+		<field name="res_model">maintenance.demande.intervention</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form,calendar</field>
+		<field name="domain">[('state', '=', 'planifie')]</field>
+	</record>
+	<record model="ir.actions.act_window" id="action_demande_traite">
+		<field name="name">Demande d'intervention</field>
+		<field name="res_model">maintenance.demande.intervention</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('state', '=', 'traite')]</field>
+	</record>
+	<record model="ir.actions.act_window" id="action_demande_evalue">
+		<field name="name">Demande d'intervention</field>
+		<field name="res_model">maintenance.demande.intervention</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('state', '=', 'evalue')]</field>
+	</record>
+	<record model="ir.actions.act_window" id="action_demande_cloture">
+		<field name="name">Demande d'intervention</field>
+		<field name="res_model">maintenance.demande.intervention</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('state', '=', 'cloture')]</field>
+	</record>
+
+	<record id="view_action_demande_intervention_simple_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="maintenance_demande_intervention_tree" />
+		<field name="act_window_id" ref="action_demande_intervention_simple" />
+	</record>
+	<record id="view_action_demande_intervention_simple_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="maintenance_demande_intervention_simple_form" />
+		<field name="act_window_id" ref="action_demande_intervention_simple" />
+	</record>
+
+	<record id="view_action_demande_intervention_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="maintenance_demande_intervention_tree" />
+		<field name="act_window_id" ref="action_demande_intervention" />
+	</record>
+	<record id="view_action_demande_intervention_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="maintenance_demande_intervention_form" />
+		<field name="act_window_id" ref="action_demande_intervention" />
+	</record>
+
+	<record id="view_action_demande_planifie_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="maintenance_demande_intervention2_tree" />
+		<field name="act_window_id" ref="action_demande_planifie" />
+	</record>
+	<record id="view_action_demande_planifie_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="maintenance_demande_intervention_form" />
+		<field name="act_window_id" ref="action_demande_planifie" />
+	</record>
+
+	<record id="view_action_demande_traite_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="maintenance_demande_intervention2_tree" />
+		<field name="act_window_id" ref="action_demande_traite" />
+	</record>
+	<record id="view_action_demande_traite_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="maintenance_demande_intervention_form" />
+		<field name="act_window_id" ref="action_demande_traite" />
+	</record>
+
+	<record id="view_action_demande_evalue_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="maintenance_demande_intervention2_tree" />
+		<field name="act_window_id" ref="action_demande_evalue" />
+	</record>
+	<record id="view_action_demande_evalue_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="maintenance_demande_intervention_form" />
+		<field name="act_window_id" ref="action_demande_evalue" />
+	</record>
+
+	<record id="view_action_demande_cloture_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="maintenance_demande_intervention2_tree" />
+		<field name="act_window_id" ref="action_demande_cloture" />
+	</record>
+	<record id="view_action_demande_cloture_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="maintenance_demande_intervention_form" />
+		<field name="act_window_id" ref="action_demande_cloture" />
+	</record>
+
+<!-- maintenance_prestataire Action -->
+	<record model="ir.actions.act_window" id="action_maintenance_prestataire">
+		<field name="name">Prestataire</field>
+		<field name="res_model">maintenance.prestataire</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+<!-- maintenance_preventive Action -->
+	<record model="ir.actions.act_window" id="action_maintenance_preventive">
+		<field name="name">Maintenence preventive</field>
+		<field name="res_model">maintenance.preventive</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_planifie': 1}</field>
+	</record>
+
+
+	<menuitem name="Maintenance" id="maintenance_menu" 
+		groups="production.group_maintenance,production.group_responsable_maintenance"/>
+
+		<menuitem name="Machines" id="maintenance_machine_main_menu" parent="maintenance_menu" sequence="1"/>
+			<menuitem name="Machines" id="maintenance_machine_menu_item" parent="maintenance_machine_main_menu" 
+				action="action_production_machine" sequence="1"/>
+			<menuitem name="Maintenance préventive" id="maintenance_preventive_menu_item" parent="maintenance_machine_main_menu" 
+				action="action_maintenance_preventive" sequence="2"/>
+
+		<menuitem name="Demande d'intervention" id="demande_intervention_main_menu" parent="maintenance_menu" sequence="2"/>
+			<!--<menuitem name="Nouvelle demande" id="demande_intervention_menu_item" parent="demande_intervention_main_menu" 
+				groups="production.group_maintenance"
+				action="gestionproduction2.action_maintenance" sequence="1"/>-->
+			<menuitem name="Nouvelle demande" id="demande_intervention_res_menu_item" parent="demande_intervention_main_menu" 
+				groups="production.group_responsable_maintenance"
+				action="action_demande_intervention" sequence="2"/>
+			<menuitem name="Demande planifiée" id="demande_planifie_menu_item" parent="demande_intervention_main_menu" 
+				groups="production.group_responsable_maintenance"
+				action="action_demande_planifie" sequence="3"/>
+			<menuitem name="Demande traitée" id="demande_traite_menu_item" parent="demande_intervention_main_menu" 
+				groups="production.group_responsable_maintenance"
+				action="action_demande_traite" sequence="4"/>
+			<menuitem name="Demande évaluée" id="demande_evalue_menu_item" parent="demande_intervention_main_menu" 
+				groups="production.group_responsable_maintenance"
+				action="action_demande_evalue" sequence="5"/>
+			<menuitem name="Demande clôturée" id="demande_cloture_menu_item" parent="demande_intervention_main_menu" 
+				groups="production.group_responsable_maintenance"
+				action="action_demande_cloture" sequence="6"/>
+
+		<menuitem name="Equipement" id="equipement_main_menu" parent="maintenance_menu" sequence="4"/>
+			<menuitem name="Pièces de rechange" id="piece_menu_item" parent="equipement_main_menu" 
+				action="action_maintenance_piece" sequence="1"/>
+			<menuitem name="Bon entrée pièce" id="bon_entree_piece_menu_item" parent="equipement_main_menu" 
+				action="action_bon_entree_piece" sequence="1"/>
+
+		<menuitem name="Configuration" id="config_main_menu" parent="maintenance_menu" sequence="5"/>
+			<menuitem name="Panne" id="panne_menu_item" parent="config_main_menu" 
+				action="action_maintenance_panne" sequence="1"/>
+			<menuitem name="Prestataire externe" id="prestataire_menu_item" parent="config_main_menu" 
+				action="action_maintenance_prestataire" sequence="1"/>
+			<menuitem name="Opérateurs" id="operateur_menu_item" parent="config_main_menu" 
+				action="action_production_operateur" sequence="1"/>
+
+	</data>
+</openerp>

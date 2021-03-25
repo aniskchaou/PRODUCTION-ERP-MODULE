@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+
+		<!-- sequence bon_entree_piece-->
+		<record id="sequence_bon_entree_piece_type" model="ir.sequence.type">
+			<field name="name">Bon entree piece</field>
+			<field name="code">bon.entree.piece</field>
+		</record>
+
+		<record id="sequence_bon_entree_piece" model="ir.sequence">
+			<field name="name">Bon entree piece</field>
+			<field name="code">bon.entree.piece</field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- sequence maintenance demande intervention -->
+		<record id="sequence_maintenance_demande_intervention_type" model="ir.sequence.type">
+			<field name="name">Maintenance demande intervention</field>
+			<field name="code">maintenance.demande.intervention</field>
+		</record>
+
+		<record id="sequence_maintenance_demande_intervention" model="ir.sequence">
+			<field name="name">Maintenance demande intervention</field>
+			<field name="code">maintenance.demande.intervention</field>
+			<field name="prefix">INTERVENTION-</field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- sequence maintenance corrective-->
+		<record id="sequence_maintenance_corrective_type" model="ir.sequence.type">
+			<field name="name">Maintenance corrective</field>
+			<field name="code">maintenance.corrective</field>
+		</record>
+
+		<record id="sequence_maintenance_corrective" model="ir.sequence">
+			<field name="name">Maintenance corrective</field>
+			<field name="code">maintenance.corrective</field>
+			<field name="prefix">MC-</field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- sequence maintenance preventive-->
+		<record id="sequence_maintenance_preventive_type" model="ir.sequence.type">
+			<field name="name">Maintenance preventive</field>
+			<field name="code">maintenance.preventive</field>
+		</record>
+
+		<record id="sequence_maintenance_preventive" model="ir.sequence">
+			<field name="name">Maintenance preventive</field>
+			<field name="code">maintenance.preventive</field>
+			<field name="prefix">MP-</field>
+			<field name="padding">6</field>
+		</record>
+
+        <record id="ir_cron_verifier_stock_piece_action" model="ir.cron">
+            <field name="name">verifier stock piece</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'maintenance.piece'" name="model"/>
+            <field eval="'verifier_stock_piece'" name="function"/>
+        </record>
+
+	</data>
+</openerp>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="production assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/production/static/src/css/production.css"/>
+            	<link rel="stylesheet" href="/production/static/lib/font-awesome-4.5.0/css/font-awesome.css"/>
+                <script type="text/javascript" src="/production/static/src/js/production.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>

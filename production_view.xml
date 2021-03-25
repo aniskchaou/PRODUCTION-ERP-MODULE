@@ -1,0 +1,2013 @@
+<?xml version="1.0" ?>
+
+<openerp>
+	<data>
+<!--
+________FORMS__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	production_famille Form
+-->
+	<record model="ir.ui.view" id="production_famille_form">
+		<field name="name">production.famille.form</field>
+		<field name="model">production.famille</field>
+		<field name="arch" type="xml">
+			<form string="famille">
+				<sheet>
+					<field name="id" invisible='1'/>
+					<field name="image_medium" widget='image' class="oe_left oe_avatar"/>
+					<div class="oe_title">
+						<h2><label for="categoryID" /><field name="categoryID" class="oe_inline"/></h2>
+						<group >
+							<field name="catdescription" class="oe_inline"/>
+							<field name="unite" class="oe_inline"/>
+						</group>
+					</div>
+					<notebook>
+						<page string="Paramétrage interface Article">
+							<group col="6">
+								<group string="Champs actifs" col="4">
+									<group>
+										<field name="all_ar" nolabel="1" colspan="2"/>
+										<field name="diametre"/>
+										<field name="transversal_ha"/>
+										<field name="diametre_longitudinal"/>
+										<field name="longitudinal_ha"/>
+										<field name="maille_transversal"/>
+										<field name="maille_longitudinal"/>
+									</group>
+									<group>
+										<field name="largeur"/>
+										<field name="longueur"/>
+										<field name="poids_unit"/>
+										<field name="dimension_m2"/>
+										<field name="poids_lineaire"/>
+									</group>
+								</group>
+								<group col="1">
+									<group string="Calcul du poids et surface">
+										<field name="calcul_poids" widget="formule"
+											attrs="{'readonly': [('poids_unit', '=', False)]}"/>
+										<field name="calcul_surface" widget="formule"
+											attrs="{'readonly': [('dimension_m2', '=', False)]}"/>
+										<field name="calcul_poids_lineaire" widget="formule"
+											attrs="{'readonly': [('poids_lineaire', '=', False)]}"/>
+									</group>
+								</group>
+							</group>
+							<table width="100%">
+								<td><hr /></td>
+								<td style="width:1px; padding: 10px 10px; white-space: nowrap;">
+									<h3 onclick="show1()">
+										<a class="btn btn-default btn-xs"> . . . </a>
+									</h3>
+								</td>
+								<td><hr /></td>
+							</table>
+							<footer id="variable1" style="display:none;">
+								<div>
+									<a class="btn btn-default btn-lg" onclick="insertText('+')">+</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('-')">-</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('*')">*</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('/')">/</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('%')">%</a>
+									<spam> ... </spam>
+									<a class="btn btn-default btn-lg" onclick="insertText('0')">0</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('1')">1</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('2')">2</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('3')">3</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('4')">4</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('5')">5</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('6')">6</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('7')">7</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('8')">8</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('9')">9</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('.')">.</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('3.14')">3.14</a>
+								</div>
+								<separator/>
+								<div>
+									<a class="btn btn-default btn-lg" onclick="insertText('d')" 
+										title="Diametre">d</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('dl')" 
+										title="Diametre longitudinal">dl</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('mt')" 
+										title="Maille transversale">mt</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('ml')" 
+										title="Maille longitudinale">ml</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('la')" 
+										title="Largeur">la</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('lo')" 
+										title="Longueur">lo</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('nl')" 
+										title="Nombre de barres longitudinales">nl</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('nt')" 
+										title="Nombre de barres transversales">nt</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('pu')" 
+										title="Poids unitaire">pu</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('mc')" 
+										title="Dimension m²">mc</a>
+									<a class="btn btn-default btn-lg" onclick="insertText('pl')" 
+										title="Poids linéaire">pl</a>
+								</div>
+							</footer>
+							<script>
+								var lastFocused; 
+
+								$("body").on("focus", "input", function() {
+								  var focusId = $(this).attr('id');
+								  lastFocused = $('#' + focusId)[0];
+								});
+
+								function insertText(text) {
+								  var input = lastFocused;
+								  if (input == undefined) { return; }
+								  var scrollPos = input.scrollTop;
+								  var posStart = 0;
+								  var posEnd = 0;
+								  posStart = input.selectionStart;
+								  posEnd = input.selectionEnd;
+								  var front = (input.value).substring(0, posStart);
+								  var back = (input.value).substring(posEnd, input.value.length); 
+								  input.value = front+text+back;
+								  posStart = posStart + text.length;
+								  input.selectionStart = posStart;
+								  input.selectionEnd = posStart;
+								  input.focus();
+								  input.scrollTop = scrollPos;
+								}
+								function show1(){
+									if( $("#variable1").is(":visible")) { 
+										$("#variable1").hide();
+									} else {
+										$("#variable1").show();
+									}
+								}
+
+							</script>
+						</page>
+						<page string="Paramétrage interface OF">
+							<group col="6">
+								<group string="Champs actifs optionnels" colspan="2">
+									<field name="all_of" nolabel="1" colspan="2"/>
+									<field name="article_entree2"/>
+									<field name="tolerance_qte_plus"/>
+									<field name="tolerance_qte_moins"/>
+									<field name="tolerance_dimension"/>
+								</group>
+								<group string="Familles entrantes" attrs="{'invisible': [('id', '=', False)]}" colspan="4">
+									<field name="famille_entrant_param_ids" nolabel="1"
+										context="{'default_famille_sortant_id': active_id}" 
+										attrs="{'invisible': [('article_entree2', '=', True)]}">
+										<tree>
+											<field name="famille_entrant1_id"/>
+											<field name="calcul_quantite1"/>
+											<field name="unite_q1"/>
+										</tree>
+									</field>
+									<field name="famille_entrant_param2_ids" nolabel="1"
+										context="{'default_famille_sortant_id': active_id}" 
+										attrs="{'invisible': [('article_entree2', '=', False)]}">
+										<tree>
+											<field name="famille_entrant1_id"/>
+											<field name="calcul_quantite1"/>
+											<field name="unite_q1"/>
+											<field name="famille_entrant2_id"/>
+											<field name="calcul_quantite2"/>
+											<field name="unite_q2"/>
+										</tree>
+									</field>
+								</group>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+    </record>
+<!-- 
+	production_activite Form 
+-->
+	<record model="ir.ui.view" id="production_activite_form">
+		<field name="name">production.activite.form</field>
+		<field name="model">production.activite</field>
+		<field name="arch" type="xml">
+			<form string="Activité">
+				<sheet>
+					<field name="image_medium" widget='image' class="oe_left oe_avatar"/>
+					<div class="oe_title">
+						<h1><label for="nom_activite"/> <field name="nom_activite" class="oe_inline"/></h1>
+					</div>
+					<button name="ajouter_article" type="object" icon="fa-book" class="oe_stat_button oe_right">
+						<field name="article_count" widget="statinfo"/>
+					</button>
+					<button name="ajouter_machine" type="object" icon="fa-industry" class="oe_stat_button oe_right">
+						<field name="machine_count" widget="statinfo"/>
+					</button>
+<!--
+					<button name="ajouter_OF" string="Ajouter OF" type="object" icon="fa-tasks"	
+							class="oe_stat_button oe_right"/>
+-->
+<!--
+					<button name="%(action_view_select_famille_sortant)d" string="Ajouter OF" type="action" icon="fa-tasks"
+						class="oe_stat_button oe_right"
+						context="{'activite_famille_sortant_ids': activite_famille_sortant_ids}"/>
+-->
+					<group>
+						<group string="Familles entrantes">
+							<field name="activite_famille_entrant_ids" nolabel="1"/>
+						</group>
+						<group string="Familles sortantes">
+							<field name="activite_famille_sortant_ids" nolabel="1" >
+								<tree String="Familles sortantes" editable="bottom">
+									<button name="ajouter_of" type="object"
+										string="Ajouter OF" icon="../../../../../production/static/src/img/icons/article-4"/>
+									<button name="ajouter_article" type="object"
+								string="Ajouter Article" icon="../../../../../production/static/src/img/icons/article-3"/>
+									<field name="categoryID"/>
+									<field name="catdescription"/>
+									<field name="unite"/>
+								</tree>
+							</field>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+<!-- 
+	production_article Form 
+-->
+	<record model="ir.ui.view" id="production_article_form">
+		<field name="name">production.article.form</field>
+		<field name="model">production.article</field>
+		<field name="arch" type="xml">
+			<form string="Article">
+				<header>
+<!--
+					<label for="activite_id"/>
+					<field name="activite_id" class="oe_inline"/>
+-->
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="code_article"/> <field name="code_article" class="oe_inline"/></h1>
+					</div>
+					<div class="oe_right oe_button_box">
+						<button name="creer_of" type="object" icon="fa-tasks" string="Créer OF" class="oe_stat_button"/>
+<!--
+						<button name="creer_commande" type="object" icon="fa-shopping-cart" class="oe_stat_button" 
+							string="Commander"/>
+-->
+						<button name="creer_demande" type="object" icon="fa-shopping-cart" class="oe_stat_button" 
+							string="Demande d'achat"/>
+					</div>
+					<separator/>
+					<group col="4">
+						<field name="famille_id"/>
+						<field name="unite"/>
+					</group>
+					<group col="6">
+						<group>
+							<field name="famille_diametre" invisible='1'/>
+							<field name="diametre" 
+								attrs="{'invisible': [('famille_diametre', '=', False)]}"/>
+							<field name="famille_transversal_ha" invisible='1'/>
+							<field name="transversal_ha" 
+								attrs="{'invisible': [('famille_transversal_ha', '=', False)]}"/>
+							<field name="famille_diametre_longitudinal" invisible='1'/>
+							<field name="diametre_longitudinal" 
+								attrs="{'invisible': [('famille_diametre_longitudinal', '=', False)]}"/>
+							<field name="famille_longitudinal_ha" invisible='1'/>
+							<field name="longitudinal_ha" 
+								attrs="{'invisible': [('famille_longitudinal_ha', '=', False)]}"/>
+						</group>
+						<group>
+							<field name="famille_maille_transversal" invisible='1'/>
+							<field name="maille_transversal" 
+								attrs="{'invisible': [('famille_maille_transversal', '=', False)]}"/>
+							<field name="famille_maille_longitudinal" invisible='1'/>
+							<field name="maille_longitudinal" 
+								attrs="{'invisible': [('famille_maille_longitudinal', '=', False)]}"/>
+							<field name="famille_largeur" invisible='1'/>
+							<field name="largeur" 
+								attrs="{'invisible': [('famille_largeur', '=', False)]}"/>
+							<field name="famille_longueur" invisible='1'/>
+							<field name="longueur" 
+								attrs="{'invisible': [('famille_longueur', '=', False)]}"/>
+						</group>
+						<group>
+							<field name="famille_poids_unit" invisible='1'/>
+							<field name="poids_unit" 
+								attrs="{'invisible': [('famille_poids_unit', '=', False)]}"/>
+							<field name="famille_dimension_m2" invisible='1'/>
+							<field name="dimension_m2" 
+								attrs="{'invisible': [('famille_dimension_m2', '=', False)]}"/>
+							<field name="famille_poids_lineaire" invisible='1'/>
+							<field name="poids_lineaire" 
+								attrs="{'invisible': [('famille_poids_lineaire', '=', False)]}"/>
+						</group>
+					</group>
+					<group>
+						<field name="nbr_Barres_longitudinales"
+							attrs="{'invisible': [('famille_maille_transversal', '=', False)]}"/>
+						<field name="nbr_Barres_transversales"
+							attrs="{'invisible': [('famille_maille_longitudinal', '=', False)]}"/>
+					</group>
+					<notebook>
+						<page string="Machines">
+							<field name="article_machine_ids" context="{'default_famille_id': famille_id}" >
+								<tree String="Machines" editable="bottom">
+									<field name="famille_id" invisible="1"/>
+									<field name="machine_id"/>
+									<field name="cadence"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Stock">
+							<group>
+								<group>
+									<label for="stock_reel"/>
+									<div>
+										<field name="stock_reel" class="oe_inline"/>
+										<button name="%(action_view_change_article_qte)d" string="⇒ Mêtre à jour"
+												type="action" class="oe_link"/>
+									</div>
+									<field name="stock_securite"/>
+									<field name="stock_minimale"/>
+									<field name="stock_maximale"/>
+								</group>
+								<group>
+									<field name="stock_disponible"/>
+									<field name="stock_reserve"/>
+									<field name="stock_non_reserve"/>
+								</group>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+    </record>
+<!-- 
+	production_operateur Form 
+-->
+	<record model="ir.ui.view" id="production_operateur_form">
+		<field name="name">production.operateur.form</field>
+		<field name="model">production.operateur</field>
+		<field name="arch" type="xml">
+			<form string="Opérateur">
+				<sheet>
+					<field name="image_medium" widget='image' class="oe_left oe_avatar"/>
+					<div class="oe_title">
+						<h1><label for="code_operateur"/> <field name="code_operateur" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="nom" class="oe_inline"/>
+							<field name="prenom" class="oe_inline"/>
+							<field name="cout_horaire" groups="production.group_admin"/>
+						</group>
+						<group>
+							<field name="tel" class="oe_inline"/>
+							<field name="email" class="oe_inline" widget="email"/>
+							<field name="active"/>
+						</group>
+					</group>
+					<separator string="Qualifié pour les machines" />
+					<field name="operateur_machine_ids" >
+						<tree>
+							<field name="code_machine"/>
+							<field name="nom"/>
+							<field name="annee_debut_production"/>
+						</tree>
+					</field>
+					<separator string="Evaluations" />
+					<group>
+						<field name="note_moyenne"/>
+					</group>
+					<field name="evaluation_ids"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+<!-- 
+	production_machine Form 
+-->
+	<record model="ir.ui.view" id="production_machine_form">
+		<field name="name">production.machine.form</field>
+		<field name="model">production.machine</field>
+		<field name="arch" type="xml">
+			<form string="Machine">
+				<header>
+					<label for="activite_id"/>
+					<field name="activite_id" class="oe_inline"/>
+				</header>
+				<sheet>
+					<field name="image_medium" widget='image' class="oe_left oe_avatar"/>
+					<div class="oe_title">
+						<h1><label for="code_machine"/> <field name="code_machine" class="oe_inline"/></h1>
+					</div>
+					<div class="oe_right oe_button_box">
+
+						<button name="ajouter_demande_intervention" type="object" icon="fa-bolt" class="oe_stat_button">
+							<field name="demande_intervention_count" widget="statinfo"/>
+						</button>
+						<button name="ajouter_maintenance_preventive" type="object" icon="fa-wrench" class="oe_stat_button">
+							<field name="maintenance_preventive_count" widget="statinfo"/>
+						</button>
+						<button name="creer_of" type="object" icon="fa-tasks" string="Créer OF" class="oe_stat_button"/>
+<!--                    
+						<button name="ajouter_piece" type="object" icon="fa-cog" class="oe_stat_button">
+							<field name="piece_count" widget="statinfo"/>
+						</button>
+-->
+					</div>
+					<group>
+
+
+
+					
+
+
+
+						<group>
+							<field name="nom" class="oe_inline"/>
+							<field name="annee_debut_production" class="oe_inline"/>
+						</group>
+						<group>
+							<field name="active"/>
+							<field name="duree_fonctionnement" widget="float_time"/>
+							<field name="temp_arret"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Familles entrées/sorties">
+							<group>
+								<group>
+									<field name="famille_entree1"/>
+									<field name="famille_entree2"/>
+									<field name="famille_entree3"/>
+									<field name="famille_entree4"/>
+								</group>
+								<group>
+									<field name="famille_sortie1"/>
+									<field name="famille_sortie2"/>
+									<field name="famille_sortie3"/>
+									<field name="famille_sortie4"/>
+								</group>
+							</group>
+						</page>
+						<page string="Pièces de rechange">
+							<field name="machine_piece_ids">
+								<tree>
+									<button name="ajouter_bon_entree_piece" string="Ajouter bon entrée pièce"
+											class="oe_highlight" type="object" icon="STOCK_ADD"/>
+									<field name="code_piece"/>
+									<field name="name"/>
+									<field name="quantite_stock"/>
+									<field name="unite"/>
+									<field name="prix"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Demande d'intervention">
+							<field name="demande_intervention_ids">
+								<tree create="false">
+									<field name="reference_intervention"/>
+									<field name="date_demande"/>
+									<field name="state"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Maintenance préventive">
+							<field name="maintenance_preventive_ids">
+								<tree create="false">
+									<field name="reference_maintenance_preventive"/>
+									<field name="type_intervalle"/>
+									<field name="intervalle"/>
+									<field name="duree"/>
+									<field name="panne_id"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Opérateurs">
+							<field name="operateur_machine_ids">
+								<tree>
+									<field name="code_operateur"/>
+									<field name="nom"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+<!-- 
+	production_ordre_fabrication Form 
+-->
+	<record model="ir.ui.view" id="production_ordre_fabrication_form">
+		<field name="name">production.ordre.fabrication.form</field>
+		<field name="model">production.ordre.fabrication</field>
+		<field name="arch" type="xml">
+			<form string="Ordre Fabrication">
+				<field name="article_famille_article_entree2" invisible="1" />
+				<field name="article_famille_tolerance_qte_plus" invisible="1"/>
+				<field name="article_famille_tolerance_qte_moins" invisible="1"/>
+				<field name="article_famille_tolerance_dimension" invisible="1"/>
+				<field name="line_commande_id" invisible="1"/>
+				<header>
+					<button name="action_demarrer_fabrication" string="Marquer comme démarré" states="planifie" 
+						class="oe_highlight" type="object" />
+					<button name="action_terminer_fabrication" string="Fabriquer" states="demarre" 
+						class="oe_highlight" type="object" />
+					<button name="action_arreter_fabrication" string="Arréter la production" states="demarre" 
+						class="oe_highlight" type="object" />
+					<label for="activite_id"/>
+					<field name="activite_id" class="oe_inline"/>
+					<label for="famille_id"/>
+					<field name="famille_id" class="oe_inline" />
+					<field name="state"  widget="statusbar" statusbar_visible="planifie,demarre,termine"/>
+				</header>
+				<sheet>
+					<button name="ajouter_bon_entree_fabrication" type="object" icon="fa-plus-square" 
+							class="oe_stat_button oe_right" states="demarre">
+						<field name="bon_entree_count" widget="statinfo"/>
+					</button>
+					<group col="5">
+						<group colspan="3">
+							<field name="code_of"/>
+						</group>
+						<group colspan="2">
+							<field name="commande_id" options="{'no_create': True, 'no_open': True}" domain="[('id', 'in', [])]"
+								attrs="{'invisible': [('commande_id', '=', False)]}"/>
+						</group>
+					</group>
+					<group col="5">
+						<group col="6" colspan="6">
+							<field name="article_sortant" colspan="6" domain="[('famille_id','=',famille_id)]"/>
+							<field name="quantite" colspan="4"  />
+							<field name="quantite_stock_article_sortant" nolabel="1" class="stock_dispo" colspan="2" />                                               
+							<field name='unite_article_sortant'  colspan="3" readonly="1"/>
+                             <field name="unite_article_a_convertir"  class="oe_inline" options="{'no_create': True, 'no_open': True}" colspan="3"  />
+                            <field name="conversion"  colspan="6"  />
+                            <field name="qte_unite_article_a_convertir"  colspan="6"  invisible="1"/>
+<!-- 
+							<field name="unite_quantite_sortant" colspan="6"/>
+-->
+							<field name="code_machine" colspan="6" options="{'no_create': True, 'no_open': False}"/>
+							<field name="code_operateur" colspan="6" options="{'no_create': True, 'no_open': True}"/>
+						</group>
+						<group col="2" colspan="2">
+							<field name="date_debut" colspan="2"/>
+
+							<field name="date_fin"/>
+							<field name="cerclage"/>
+							<field name="zone_stockage_id" class="oe_inline"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Articles entrants">
+							<group col="5">
+								<group col="6" colspan="3">
+									<field name="article_entree1" colspan="6" />
+									<field name="quantite1" />
+									<field name="quantite_stock_article_entree1" nolabel="1" class="stock_dispo" colspan="3"/>
+									<field name='unite_article_entree1' nolabel="1" readonly="1" class="unite" />
+									<field name="grade_entree1"   colspan="6"/>
+								</group>
+								<div>
+<!--
+									<button name="reserver_pour_entree1" type="object" icon="fa-lock" 
+											class="oe_stat_button oe_right">
+										<field name="quantite_reserve_entree1" widget="statinfo"/>
+									</button>
+-->
+									<button name="creer_of_from_entree1" type="object" icon="fa-tasks" 
+											class="oe_stat_button oe_right" string="Créer OF"/>
+<!--
+									<button name="creer_commande_entree1" type="object" icon="fa-shopping-cart" 
+											class="oe_stat_button oe_right" string="Commander"/>
+-->
+									<button name="creer_demande_entree1" type="object" icon="fa-shopping-cart" 
+											class="oe_stat_button oe_right" string="Demande d'achat"/>
+								</div>
+							</group>
+							<group col="5" attrs="{'invisible': [('article_famille_article_entree2', '=', False),
+															('article_sortant', '!=', False)]}">
+								<hr colspan="5"/>
+								<group col="6" colspan="3">
+									<field name="article_entree2" colspan="6"
+										attrs="{'required': [('article_famille_article_entree2', '=', True),
+															('article_sortant', '!=', False)] }"/>
+									<field name="quantite2"
+										attrs="{'required': [('article_famille_article_entree2', '=', True),
+															('article_sortant', '!=', False)] }"/>
+									<field name="quantite_stock_article_entree2" nolabel="1" class="stock_dispo" colspan="3"/>
+									<field name='unite_article_entree2' nolabel="1" readonly="1" class="unite" />
+
+									<field name="grade_entree2" colspan="6"/>
+								</group>
+								<div>
+<!--
+									<button name="reserver_pour_entree2" type="object" icon="fa-lock" 
+											class="oe_stat_button oe_right">
+										<field name="quantite_reserve_entree2" widget="statinfo"/>
+									</button>
+-->
+									<button name="creer_of_from_entree2" type="object" icon="fa-tasks" 
+										class="oe_stat_button oe_right" string="Créer OF"/>
+<!--
+									<button name="creer_commande_entree2" type="object" icon="fa-shopping-cart" 
+										class="oe_stat_button oe_right" string="Commander"/>
+-->
+									<button name="creer_demande_entree2" type="object" icon="fa-shopping-cart" 
+										class="oe_stat_button oe_right" string="Demande d'achat"/>
+								</div>
+							</group>
+						</page>
+						<page string="Autres">
+							<group>
+								<group>
+									<field name="nbre_par_paquet"/>
+									<field name="grade_sortie"/>
+									<field name="cadence"/>
+								</group>
+								<group>
+									<field name="tolerance_qte_plus"
+										attrs="{'invisible': [('article_famille_tolerance_qte_plus', '=', False),
+															('article_sortant', '!=', False)]}"/>
+									<field name="tolerance_qte_moins"
+										attrs="{'invisible': [('article_famille_tolerance_qte_moins', '=', False),
+															('article_sortant', '!=', False)]}"/>
+									<field name="tolerance_dimension" 
+										attrs="{'invisible': [('article_famille_tolerance_dimension', '=', False),
+															('article_sortant', '!=', False)]}"/>
+								</group>
+							</group>
+						</page>
+						<page string="Remarque">
+							<field name="remarque"/>
+						</page>
+						<page string="Bons de réservation">
+							<field name="bon_reservation_of_ids">
+								<tree create="false">
+									<field name="code_bon"/>
+									<field name="article_id"/>
+									<field name="quantite"/>
+									<field name="date_bon"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Bons entrées fabrication" attrs="{'invisible': [('state' , '=' , 'planifie')]}">
+							<field name="bon_entree_fabrication_ids">
+								<tree create="false">
+									<field name="code_bon"/>
+									<field name="code_of" invisible="1"/>
+									<field name="date_bon"/>
+									<field name="quantite"/>
+									<field name="duree" widget="float_time"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	production_bon_entree_fabrication Form 
+-->
+	<record model="ir.ui.view" id="production_bon_entree_fabrication_form">
+		<field name="name">production.bon.entree.fabrication.form</field>
+		<field name="model">production.bon.entree.fabrication</field>
+		<field name="arch" type="xml">
+			<form string="Bon d'entrée de fabrication">
+				<sheet>
+                    <div style="text-align: center;">
+                        <h1>Bon entrée fabrication</h1>
+                    </div>
+                    <hr/>
+					<div class="oe_title">
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<field name="code_of" options="{'no_create': True, 'no_open': True}"/>
+					</group>
+					<group col="7">
+						<field name="quantite"/>
+						<field name="unite" nolabel="1" readonly="1" class="unite"/>
+						<field name="duree" class="oe_inline" widget="float_time"/>
+						<field name="date_bon"/>
+						<field name="qte_restante" style="color:red;"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="production_bon_entree_fabrication_form_popup">
+		<field name="name">production.bon.entree.fabrication.form</field>
+		<field name="model">production.bon.entree.fabrication</field>
+		<field name="arch" type="xml">
+			<form string="Bon d'entrée de fabrication">
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<field name="code_of" options="{'no_create': True, 'no_open': True}"/>
+					</group>
+					<group col="7">
+						<field name="quantite"/>
+						<field name="unite" nolabel="1" readonly="1" class="unite"/>
+						<field name="duree" class="oe_inline" widget="float_time"/>
+						<field name="date_bon"/>
+						<field name="qte_restante" style="color:red;"/>
+					</group>
+				</sheet>
+				<footer> 
+					<button name="write" type="object" string="Enregistrer"/> or 
+					<button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+				</footer>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	bon_reservation_ordre_fabrication Form 
+-->
+	<record model="ir.ui.view" id="bon_reservation_ordre_fabrication_form">
+		<field name="name">bon.reservation.ordre.fabrication.form</field>
+		<field name="model">bon.reservation.ordre.fabrication</field>
+		<field name="arch" type="xml">
+			<form string="Bon de Réservation">
+				<header>
+                     <field name="etat"  widget="statusbar" statusbar_visible="nonsatisfait,satisfait"/>
+				</header>
+				<sheet>
+                    <div style="text-align: center;">
+                        <h1>Bon de réservation pour OF</h1>
+                    </div>
+                    <hr/>
+					<div class="oe_title">
+						
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<field name="ordre_fabrication_id" options="{'no_create': True, 'no_open': True}"/>
+					</group>
+					<group>
+						<group col="3">
+							<field name="article_id" colspan="3" options="{'no_create': True, 'no_open': True}"/>
+							<field name="quantite"/>
+							<field name="unite" nolabel="1" readonly="1" class="unite"/>
+						</group>
+						<group>
+							<field name="date_bon"/>
+                            <field name="stock_disponible"/>
+                            <field name="stock_non_reserve"/>
+						</group>
+					</group>
+					<label for="progress_reserve_demande"/>
+					<div class="oe_right">
+						<h4>Réservé / Demandé : (<field name="quantite_reserve" class="oe_inline"/> / 
+												<field name="quantite_demande" class="oe_inline"/> )</h4>
+					</div>
+					<field name="progress_reserve_demande" widget="progressbar"/>
+					<label for="remarque"/>
+					<field name="remarque"/>
+				</sheet>
+
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	production_famille_entrant_param Form 
+-->
+	<record model="ir.ui.view" id="production_famille_entrant_param_form">
+		<field name="name">production.famille.entrant.param.form</field>
+		<field name="model">production.famille.entrant.param</field>
+		<field name="arch" type="xml">
+			<form>
+				<field name="entree2" invisible="1"/>
+
+				<field name="diametre" invisible="1"/>
+				<field name="transversal_ha" invisible="1"/>
+				<field name="diametre_longitudinal" invisible="1"/>
+				<field name="longitudinal_ha" invisible="1"/>
+				<field name="maille_transversal" invisible="1"/>
+				<field name="maille_longitudinal" invisible="1"/>
+				<field name="largeur" invisible="1"/>
+				<field name="longueur" invisible="1"/>
+				<field name="poids_unit" invisible="1"/>
+				<field name="dimension_m2" invisible="1"/>
+				<field name="poids_lineaire" invisible="1"/>
+
+				<field name="diametre1" invisible="1"/>
+				<field name="transversal_ha1" invisible="1"/>
+				<field name="diametre_longitudinal1" invisible="1"/>
+				<field name="longitudinal_ha1" invisible="1"/>
+				<field name="maille_transversal1" invisible="1"/>
+				<field name="maille_longitudinal1" invisible="1"/>
+				<field name="largeur1" invisible="1"/>
+				<field name="longueur1" invisible="1"/>
+				<field name="poids_unit1" invisible="1"/>
+				<field name="dimension_m21" invisible="1"/>
+				<field name="poids_lineaire1" invisible="1"/>
+
+				<field name="diametre2" invisible="1"/>
+				<field name="transversal_ha2" invisible="1"/>
+				<field name="diametre_longitudinal2" invisible="1"/>
+				<field name="longitudinal_ha2" invisible="1"/>
+				<field name="maille_transversal2" invisible="1"/>
+				<field name="maille_longitudinal2" invisible="1"/>
+				<field name="largeur2" invisible="1"/>
+				<field name="longueur2" invisible="1"/>
+				<field name="poids_unit2" invisible="1"/>
+				<field name="dimension_m22" invisible="1"/>
+				<field name="poids_lineaire2" invisible="1"/>
+				<group>
+					<group col="3">
+						<field name="famille_sortant_id" readonly="1"/>
+						<field name="unite_sortant" nolabel="1" readonly="1" class="unite"/>
+						<field name="unite_qs" widget="radio" class="radio_horizontal" colspan="3" required="1"/>
+					</group>
+					<group>
+					</group>
+				</group>
+				<group>
+					<group col="5">
+						<field name="famille_entrant1_id" colspan="4" required="1"/>
+						<field name="unite_entrant1" nolabel="1" readonly="1" class="unite"/>
+						<field name="calcul_quantite1" widget="formule" colspan="5" required="1"/>
+						<field name="unite_q1" id="unite_q1" widget="radio" class="radio_horizontal" colspan="5" required="1"/>
+					</group>
+					<group col="5" attrs="{'invisible': [('entree2','=',False)]}">
+						<field name="famille_entrant2_id" colspan="4" attrs="{'required': [('entree2','=',True)]}"/>
+						<field name="unite_entrant2" nolabel="1" readonly="1" class="unite"/>
+						<field name="calcul_quantite2" widget="formule" colspan="5" 
+							attrs="{'required': [('entree2','=',True)]}"/>
+						<field name="unite_q2" widget="radio" class="radio_horizontal" colspan="5" 
+							attrs="{'required': [('entree2','=',True)]}"/>
+					</group>
+				</group>
+				<group>
+					<field name="production_condition_ids" nolabel="1" colspan="5"
+						context="{'default_entree2': entree2 ,\
+
+								'default_diametre': diametre ,\
+								'default_transversal_ha': transversal_ha,\
+								'default_diametre_longitudinal': diametre_longitudinal,\
+								'default_longitudinal_ha': longitudinal_ha,\
+								'default_maille_transversal': maille_transversal,\
+								'default_maille_longitudinal': maille_longitudinal,\
+								'default_largeur': largeur,\
+								'default_longueur': longueur,\
+								'default_poids_unit': poids_unit,\
+								'default_dimension_m2': dimension_m2,\
+								'default_poids_lineaire': poids_lineaire,\
+
+								'default_diametre1': diametre1 ,\
+								'default_transversal_ha1': transversal_ha1,\
+								'default_diametre_longitudinal1': diametre_longitudinal1,\
+								'default_longitudinal_ha1': longitudinal_ha1,\
+								'default_maille_transversal1': maille_transversal1,\
+								'default_maille_longitudinal1': maille_longitudinal1,\
+								'default_largeur1': largeur1,\
+								'default_longueur1': longueur1,\
+								'default_poids_unit1': poids_unit1,\
+								'default_dimension_m21': dimension_m21,\
+								'default_poids_lineaire1': poids_lineaire1,\
+
+								'default_diametre2': diametre2 ,\
+								'default_transversal_ha2': transversal_ha2,\
+								'default_diametre_longitudinal2': diametre_longitudinal2,\
+								'default_longitudinal_ha2': longitudinal_ha2,\
+								'default_maille_transversal2': maille_transversal2,\
+								'default_maille_longitudinal2': maille_longitudinal2,\
+								'default_largeur2': largeur2,\
+								'default_longueur2': longueur2,\
+								'default_poids_unit2': poids_unit2,\
+								'default_dimension_m22': dimension_m22,\
+								'default_poids_lineaire2': poids_lineaire2}">
+						<tree>
+							<field name="condition"/>
+						</tree>
+					</field>
+				</group>
+				<table width="100%">
+					<td><hr /></td>
+					<td style="width:1px; padding: 10px 10px; white-space: nowrap;">
+						<h3 onclick="show()">
+							<a class="btn btn-default btn-xs"> . . . </a>
+						</h3>
+					</td>
+					<td><hr /></td>
+				</table>
+				<footer id="variable" style="display:none;">
+					<div>
+						<a class="btn btn-default btn-lg" onclick="insertText('+')">+</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('-')">-</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('*')">*</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('/')">/</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('%')">%</a>
+						<spam> ... </spam>
+						<a class="btn btn-default btn-lg" onclick="insertText('0')">0</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('1')">1</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('2')">2</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('3')">3</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('4')">4</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('5')">5</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('6')">6</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('7')">7</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('8')">8</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('9')">9</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('.')">.</a>
+						<a class="btn btn-default btn-lg" onclick="insertText('3.14')">3.14</a>
+					</div>
+					<separator/>
+					<div class="variables_utiles">
+						<h4><span>Article sortant</span></h4>
+						<a class="btn btn-default btn-lg" onclick="insertText('qs')" title="La quantité sortante">qs</a>
+						<span attrs="{'invisible': [('poids_unit','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pu')" title="Poids unitaire">pu</a></span>
+						<span attrs="{'invisible': [('dimension_m2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mc')" title="Dimension m²">mc</a></span>
+						<span attrs="{'invisible': [('poids_lineaire','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pl')" title="Poids linéaire">pl</a></span>
+						<span attrs="{'invisible': [('diametre','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('d')" title="Diametre">d</a></span>
+						<span attrs="{'invisible': [('diametre_longitudinal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('dl')" 
+								title="Diametre longitudinal">dl</a></span>
+						<span attrs="{'invisible': [('maille_transversal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mt')" 
+								title="Maille transversale">mt</a></span>	
+						<span attrs="{'invisible': [('maille_longitudinal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('ml')" 
+								title="Maille longitudinale">ml</a></span>
+						<span attrs="{'invisible': [('largeur','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('la')" title="Largeur">la</a></span>
+						<span attrs="{'invisible': [('longueur','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('lo')" title="Longueur">lo</a></span>
+						<span attrs="{'invisible': ['|',('largeur','=',False),('maille_transversal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nl')" 
+								title="Nombre de barres longitudinales">nl</a></span>
+						<span attrs="{'invisible': ['|',('longueur','=',False),('maille_longitudinal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nt')" 
+								title="Nombre de barres transversales">nt</a></span>
+					</div>
+					<div class="variables_utiles">
+						<h4><span>Article entrant1</span></h4>
+						<a class="btn btn-default btn-lg" onclick="insertText('q1')" title="La quantité entrante1">q1</a>
+						<span attrs="{'invisible': [('poids_unit1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pu1')" title="Poids unitaire">pu1</a></span>
+						<span attrs="{'invisible': [('dimension_m21','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mc1')" title="Dimension m²">mc1</a></span>
+						<span attrs="{'invisible': [('poids_lineaire1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pl1')" title="Poids linéaire">pl1</a></span>
+						<span attrs="{'invisible': [('diametre1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('d1')" title="Diametre">d1</a></span>
+						<span attrs="{'invisible': [('diametre_longitudinal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('dl1')" 
+								title="Diametre longitudinal">dl1</a></span>
+			  			<span attrs="{'invisible': [('maille_transversal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mt1')" 
+								title="Maille transversale">mt1</a></span>
+						<span attrs="{'invisible': [('maille_longitudinal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('ml1')" 
+								title="Maille longitudinale">ml1</a></span>
+						<span attrs="{'invisible': [('largeur1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('la1')" title="Largeur">la1</a></span>
+						<span attrs="{'invisible': [('longueur1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('lo1')" title="Longueur">lo1</a></span>
+						<span attrs="{'invisible': ['|',('largeur1','=',False),('maille_transversal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nl1')" 
+								title="Nombre de barres longitudinales">nl1</a></span>
+						<span attrs="{'invisible': ['|',('longueur1','=',False),('maille_longitudinal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nt1')" 
+								title="Nombre de barres transversales">nt1</a></span>
+					</div>
+					<div class="variables_utiles" attrs="{'invisible': [('entree2','=',False)]}">
+						<h4><span>Article entrant2</span></h4>
+						<a class="btn btn-default btn-lg" onclick="insertText('q2')" title="La quantité entrante2">q2</a> 
+						<span attrs="{'invisible': [('poids_unit2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pu2')" title="Poids unitaire">pu2</a></span>
+						<span attrs="{'invisible': [('dimension_m22','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mc2')" title="Dimension m²">mc2</a></span>
+						<span attrs="{'invisible': [('poids_lineaire2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pl2')" title="Poids linéaire">pl2</a></span>
+						<span attrs="{'invisible': [('diametre2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('d2')" title="Diametre">d2</a></span>
+						<span attrs="{'invisible': [('diametre_longitudinal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('dl2')" 
+								title="Diametre longitudinal">dl2</a></span>
+						<span attrs="{'invisible': [('maille_transversal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mt2')" 
+								title="Maille transversale">mt2</a></span>
+						<span attrs="{'invisible': [('maille_longitudinal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('ml2')" 
+								title="Maille longitudinale">ml2</a></span>
+		  				<span attrs="{'invisible': [('largeur2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('la2')" title="Largeur">la2</a></span>
+						<span attrs="{'invisible': [('longueur2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('lo2')" title="Longueur">lo2</a></span>
+						<span attrs="{'invisible': ['|',('largeur2','=',False),('maille_transversal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nl2')" 
+								title="Nombre de barres longitudinales">nl2</a></span>
+						<span attrs="{'invisible': ['|',('longueur2','=',False),('maille_longitudinal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nt2')" 
+								title="Nombre de barres transversales">nt2</a></span>
+					</div>
+				</footer>
+				<script>
+					var lastFocused; 
+
+					$("body").on("focus", "input", function() {
+					  var focusId = $(this).attr('id');
+					  lastFocused = $('#' + focusId)[0];
+					});
+
+					function insertText(text) {
+					  var input = lastFocused;
+					  if (input == undefined) { return; }
+					  var scrollPos = input.scrollTop;
+					  var posStart = 0;
+					  var posEnd = 0;
+					  posStart = input.selectionStart;
+					  posEnd = input.selectionEnd;
+					  var front = (input.value).substring(0, posStart);
+					  var back = (input.value).substring(posEnd, input.value.length); 
+					  input.value = front+text+back;
+					  posStart = posStart + text.length;
+					  input.selectionStart = posStart;
+					  input.selectionEnd = posStart;
+					  input.focus();
+					  input.scrollTop = scrollPos;
+					}
+					function show(){
+						if( $("#variable").is(":visible")) { 
+							$("#variable").hide();
+						} else {
+							$("#variable").show();
+						}
+					}
+
+				</script>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	production_zone_stockage Form 
+-->
+	<record model="ir.ui.view" id="production_zone_stockage_form">
+		<field name="name">production.zone.stockage.form</field>
+		<field name="model">production.zone.stockage</field>
+		<field name="arch" type="xml">
+			<form string="Zone stockage">
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="name"/> <field name="name" class="oe_inline"/></h1>
+					</div>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	production_condition Form 
+-->
+	<record model="ir.ui.view" id="production_condition_form">
+		<field name="name">production.condition.form</field>
+		<field name="model">production.condition</field>
+		<field name="arch" type="xml">
+			<form string="Condition">
+
+				<field name="entree2" invisible="1"/>
+
+				<field name="diametre" invisible="1"/>
+				<field name="transversal_ha" invisible="1"/>
+				<field name="diametre_longitudinal" invisible="1"/>
+				<field name="longitudinal_ha" invisible="1"/>
+				<field name="maille_transversal" invisible="1"/>
+				<field name="maille_longitudinal" invisible="1"/>
+				<field name="largeur" invisible="1"/>
+				<field name="longueur" invisible="1"/>
+				<field name="poids_unit" invisible="1"/>
+				<field name="dimension_m2" invisible="1"/>
+				<field name="poids_lineaire" invisible="1"/>
+	
+				<field name="diametre1" invisible="1"/>
+				<field name="transversal_ha1" invisible="1"/>
+				<field name="diametre_longitudinal1" invisible="1"/>
+				<field name="longitudinal_ha1" invisible="1"/>
+				<field name="maille_transversal1" invisible="1"/>
+				<field name="maille_longitudinal1" invisible="1"/>
+				<field name="largeur1" invisible="1"/>
+				<field name="longueur1" invisible="1"/>
+				<field name="poids_unit1" invisible="1"/>
+				<field name="dimension_m21" invisible="1"/>
+				<field name="poids_lineaire1" invisible="1"/>
+	
+				<field name="diametre2" invisible="1"/>
+				<field name="transversal_ha2" invisible="1"/>
+				<field name="diametre_longitudinal2" invisible="1"/>
+				<field name="longitudinal_ha2" invisible="1"/>
+				<field name="maille_transversal2" invisible="1"/>
+				<field name="maille_longitudinal2" invisible="1"/>
+				<field name="largeur2" invisible="1"/>
+				<field name="longueur2" invisible="1"/>
+				<field name="poids_unit2" invisible="1"/>
+				<field name="dimension_m22" invisible="1"/>
+				<field name="poids_lineaire2" invisible="1"/>
+	
+				<div class="oe_title">
+					<h1><label for="condition"/> <field name="condition" widget="formule" class="oe_inline"/></h1>
+				</div>
+				<separator/>
+				<div>
+				    <a class="btn btn-default btn-lg" onclick="insertText('+')">+</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('-')">-</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('*')">*</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('/')">/</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('%')">%</a>
+				    <spam>...</spam>
+				    <a class="btn btn-default btn-lg" onclick="insertText('0')">0</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('1')">1</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('2')">2</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('3')">3</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('4')">4</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('5')">5</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('6')">6</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('7')">7</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('8')">8</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('9')">9</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('.')">.</a>
+					<a class="btn btn-default btn-lg" onclick="insertText('3.14')">3.14</a>
+					<br/>
+<!--
+				    <a class="btn btn-default btn-lg" onclick="insertText('=')">=</a>
+-->
+				    <a class="btn btn-default btn-lg" onclick="insertText('&lt;')">&lt;</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('&gt;')">&gt;</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('==')">==</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('&lt;=')">&lt;=</a>
+				    <a class="btn btn-default btn-lg" onclick="insertText('&gt;=')">&gt;=</a>
+				</div>
+				<footer>
+					<table width="100%">
+						<td><hr /></td>
+						<td style="width:1px; padding: 10px 10px; white-space: nowrap;"><h3><b>Variables utiles</b></h3></td>
+						<td><hr /></td>
+					</table>
+					<div class="variables_utiles">
+						<h4><span>Article sortant</span></h4>
+						<a class="btn btn-default btn-lg" onclick="insertText('qs')" title="La quantité sortante">qs</a>
+						<span attrs="{'invisible': [('poids_unit','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pu')" title="Poids unitaire">pu</a></span>
+						<span attrs="{'invisible': [('dimension_m2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mc')" title="Dimension m²">mc</a></span>
+						<span attrs="{'invisible': [('poids_lineaire','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pl')" title="Poids linéaire">pl</a></span>
+						<span attrs="{'invisible': [('diametre','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('d')" title="Diametre">d</a></span>
+						<span attrs="{'invisible': [('diametre_longitudinal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('dl')" 
+								title="Diametre longitudinal">dl</a></span>
+						<span attrs="{'invisible': [('maille_transversal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mt')" 
+								title="Maille transversale">mt</a></span>
+						<span attrs="{'invisible': [('maille_longitudinal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('ml')" 
+								title="Maille longitudinale">ml</a></span>
+						<span attrs="{'invisible': [('largeur','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('la')" title="Largeur">la</a></span>
+						<span attrs="{'invisible': [('longueur','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('lo')" title="Longueur">lo</a></span>
+						<span attrs="{'invisible': ['|',('largeur','=',False),('maille_transversal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nl')" 
+								title="Nombre de barres longitudinales">nl</a></span>
+						<span attrs="{'invisible': ['|',('longueur','=',False),('maille_longitudinal','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nt')" 
+								title="Nombre de barres transversales">nt</a></span>
+					</div>
+					<div class="variables_utiles">
+						<h4><span>Article entrant1</span></h4>
+						<a class="btn btn-default btn-lg" onclick="insertText('q1')" title="La quantité entrante1">q1</a>
+						<span attrs="{'invisible': [('poids_unit1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pu1')" title="Poids unitaire">pu1</a></span>
+			 			<span attrs="{'invisible': [('dimension_m21','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mc1')" title="Dimension m²">mc1</a></span>
+						<span attrs="{'invisible': [('poids_lineaire1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pl1')" title="Poids linéaire">pl1</a></span>
+						<span attrs="{'invisible': [('diametre1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('d1')" title="Diametre">d1</a></span>
+						<span attrs="{'invisible': [('diametre_longitudinal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('dl1')" 
+								title="Diametre longitudinal">dl1</a></span>
+						<span attrs="{'invisible': [('maille_transversal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mt1')" 
+								title="Maille transversale">mt1</a></span>
+			 			<span attrs="{'invisible': [('maille_longitudinal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('ml1')" 
+								title="Maille longitudinale">ml1</a></span>
+						<span attrs="{'invisible': [('largeur1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('la1')" title="Largeur">la1</a></span>
+						<span attrs="{'invisible': [('longueur1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('lo1')" title="Longueur">lo1</a></span>
+						<span attrs="{'invisible': ['|',('largeur1','=',False),('maille_transversal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nl1')" 
+								title="Nombre de barres longitudinales">nl1</a></span>
+						<span attrs="{'invisible': ['|',('longueur1','=',False),('maille_longitudinal1','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nt1')" 
+								title="Nombre de barres transversales">nt1</a></span>
+					</div>
+					<div class="variables_utiles" attrs="{'invisible': [('entree2','=',False)]}">
+						<h4><span>Article entrant2</span></h4>
+						<a class="btn btn-default btn-lg" onclick="insertText('q2')" title="La quantité entrante2">q2</a> 
+						<span attrs="{'invisible': [('poids_unit2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pu2')" title="Poids unitaire">pu2</a></span>
+						<span attrs="{'invisible': [('dimension_m22','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mc2')" title="Dimension m²">mc2</a></span>
+						<span attrs="{'invisible': [('poids_lineaire2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('pl2')" title="Poids linéaire">pl2</a></span>
+						<span attrs="{'invisible': [('diametre2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('d2')" title="Diametre">d2</a></span>
+						<span attrs="{'invisible': [('diametre_longitudinal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('dl2')" 
+								title="Diametre longitudinal">dl2</a></span>
+						<span attrs="{'invisible': [('maille_transversal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('mt2')" 
+								title="Maille transversale">mt2</a></span>
+						<span attrs="{'invisible': [('maille_longitudinal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('ml2')" 
+								title="Maille longitudinale">ml2</a></span>
+						<span attrs="{'invisible': [('largeur2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('la2')" title="Largeur">la2</a></span>
+						<span attrs="{'invisible': [('longueur2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('lo2')" title="Longueur">lo2</a></span>
+						<span attrs="{'invisible': ['|',('largeur2','=',False),('maille_transversal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nl2')" 
+								title="Nombre de barres longitudinales">nl2</a></span>
+						<span attrs="{'invisible': ['|',('longueur2','=',False),('maille_longitudinal2','=',False)]}">
+							<a class="btn btn-default btn-lg" onclick="insertText('nt2')" 
+								title="Nombre de barres transversales">nt2</a></span>
+					</div>
+				</footer>
+			</form>
+        </field>
+    </record>
+
+<!--
+________TREES__________________________________________________________________________________________
+
+-->
+<!-- 
+	production_famille Tree 
+-->
+	<record model="ir.ui.view" id="production_famille_tree">
+		<field name="name">production.famille.tree</field>
+		<field name="model">production.famille</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Famille" >
+				<field name="categoryID"/>
+				<field name="catdescription"/>
+				<field name="unite"/>
+			</tree>
+		</field>
+	</record>
+<!-- 
+	production_activite Tree 
+-->
+	<record model="ir.ui.view" id="production_activite_tree">
+		<field name="name">production.activite.tree</field>
+		<field name="model">production.activite</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Activite" class="tree_activite">
+				<field name="nom_activite"/>
+			</tree>
+		</field>
+	</record>
+<!-- 
+	production_article Tree 
+-->
+	<record model="ir.ui.view" id="production_article_tree">
+		<field name="name">production.article.tree</field>
+		<field name="model">production.article</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Article" >
+				<field name="famille_id"/>
+				<field name="code_article" string="Code Article"/>
+				<field name="designation" string="Désignation"/>
+				<field name="unite" width="1"/>
+				<field name="poids_unit"/>
+				<field name="dimension_m2"/>
+				<field name="poids_lineaire"/>
+				<field name="stock_reel" widget="qte_stock"/>
+				<field name="stock_disponible"/>
+				<field name="stock_non_reserve"/>
+				<field name="stock_securite"/>
+				<field name="stock_reserve"/>
+			</tree>
+		</field>
+	</record>
+<!-- 
+	production_operateur Tree 
+-->
+	<record model="ir.ui.view" id="production_operateur_tree">
+		<field name="name">production.operateur.tree</field>
+		<field name="model">production.operateur</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Opérateur" >
+				<field name="code_operateur"/>
+				<field name="nom"/>
+				<field name="prenom"/>
+				<field name="tel"/>
+				<field name="email"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+<!-- 
+	production_machine Tree 
+-->
+	<record model="ir.ui.view" id="production_machine_tree">
+		<field name="name">production.machine.tree</field>
+		<field name="model">production.machine</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Machine" >
+				<field name="code_machine"/>
+				<field name="nom"/>
+				<field name="annee_debut_production"/>
+				<field name="famille_entree1"/>
+				<field name="famille_entree2"/>
+				<field name="famille_entree3"/>
+				<field name="famille_entree4"/>
+				<field name="famille_sortie1"/>
+				<field name="famille_sortie2"/>
+				<field name="famille_sortie3"/>
+				<field name="famille_sortie4"/>
+				<field name="active"/>
+				<field name="duree_fonctionnement" widget="float_time"/>
+<!--
+				<field name="quantite_fabrique"/>
+-->
+			</tree>
+		</field>
+	</record>
+<!-- 
+	production_ordre_fabrication Tree 
+-->
+	<record model="ir.ui.view" id="production_ordre_fabrication_tree">
+		<field name="name">production.ordre.fabrication.tree</field>
+		<field name="model">production.ordre.fabrication</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree colors="blue:state in ('planifie');red:state in ('demarre');black:state in ('termine');" 
+				string="Ordre Fabrication" >
+				<button name="%(production.report_production_of)d" type="action" icon="gtk-print" string="Imprimer"/>
+				<button name="ajouter_bon_entree_fabrication" type="object" string="Bon entree fabrication" icon="gtk-add"
+						states="demarre"/>
+				<button name="action_demarrer_fabrication" states="planifie" string="Démarrer"
+						class="oe_highlight" type="object" icon="STOCK_GO_FORWARD"/>
+				<button name="action_terminer_fabrication" states="demarre" string="Terminer"
+						class="oe_highlight" type="object" icon="STOCK_APPLY"/>
+				<button name="action_arreter_fabrication" states="demarre" string="Arrêter"
+						class="oe_highlight" type="object" icon="STOCK_CANCEL"
+						confirm="Voulez vous arrêter cette OF?"/>
+				<field name="code_operateur"/>
+				<field name="code_machine"/>
+				<field name="article_sortant"/>
+				<field name="unite_article_sortant"/>
+				<field name="quantite"/>
+				<field name="quantite_realiser"/>
+                <field name="zone_stockage_id"/>
+				<field name="quantite_stock_article_sortant"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="state"/>
+				<field name="progress" widget="progressbar"/>
+			</tree>
+		</field>
+	</record>
+<!-- 
+	production_bon_entree_fabrication Tree 
+-->
+	<record model="ir.ui.view" id="production_bon_entree_fabrication_tree">
+		<field name="name">production.bon.entree.fabrication.tree</field>
+		<field name="model">production.bon.entree.fabrication</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Bon entrée de fabrication" >
+				<field name="code_bon"/>
+				<field name="code_of"/>
+				<field name="date_bon"/>
+				<field name="quantite"/>
+				<field name="duree" widget="float_time"/>
+			</tree>
+		</field>
+	</record>
+<!-- 
+	bon_reservation_ordre_fabrication Tree 
+-->
+	<record model="ir.ui.view" id="bon_reservation_ordre_fabrication_tree">
+		<field name="name">bon.reservation.ordre.fabrication.tree</field>
+		<field name="model">bon.reservation.ordre.fabrication</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Bon de Réservation">
+
+				<field name="code_bon"/>
+				<field name="ordre_fabrication_id"/>
+				<field name="article_id"/>
+				<field name="quantite"/>
+				<field name="date_bon"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	production_zone_stockage Tree 
+-->
+	<record model="ir.ui.view" id="production_zone_stockage_tree">
+		<field name="name">production.zone.stockage.tree</field>
+		<field name="model">production.zone.stockage</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Zone stockage" >
+				<field name="name"/>
+			</tree>
+		</field>
+	</record>
+
+<!--
+________CALANDAR__________________________________________________________________________________________
+
+-->
+<!-- 
+	production_ordre_fabrication calendar 
+-->
+	<record model="ir.ui.view" id="production_ordre_production_calendar">
+		<field name="name">production.ordre.fabrication.calendar</field>
+		<field name="model">production.ordre.fabrication</field>
+		<field eval="2" name="priority"/>
+		<field name="arch" type="xml">
+			<calendar color="code_machine" date_start="date_debut" date_stop="date_fin" string="Odre de fabrication">
+				<field name="code_of"/>
+				<field name="code_operateur"/>
+				<field name="code_machine"/>
+				<field name="quantite_realiser"/>
+			</calendar>
+		</field>
+	</record>
+
+<!--
+________GANTT__________________________________________________________________________________________
+
+-->
+<!-- 
+	production_ordre_fabrication gantt 
+-->
+	<record model="ir.ui.view" id="production_ordre_fabrication_gantt">
+		<field name="name">production.ordre.fabrication.gantt</field>
+		<field name="model">production.ordre.fabrication</field>
+		<field name="arch" type="xml">
+			<gantt date_stop="date_fin" date_start="date_debut" progress="progress" string="Productions">
+			</gantt>
+		</field>
+	</record>
+
+<!--
+________SEARCH__________________________________________________________________________________________
+
+-->
+<!-- 
+	production_article search 
+-->
+	<record model="ir.ui.view" id="production_article_search">
+		<field name="name">production.article.search</field>
+		<field name="model">production.article</field>
+		<field name="arch" type="xml">
+			<search string="Article">
+				<field name="code_article" string="Code Article"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Famille" domain="[]" context="{'group_by':'famille_id'}"/>
+					<filter string="Unité" domain="[]" context="{'group_by':'unite'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	color_status search 
+-->
+	<record model="ir.ui.view" id="color_status_search">
+		<field name="name">color.status.search</field>
+		<field name="model">color.status</field>
+		<field name="arch" type="xml">
+			<search string="Color">
+				<filter string="Etats par objet" name="etat_par_objet" domain="[]" context="{'group_by':'objet'}"/>
+			</search>
+		</field>
+	</record>
+<!-- 
+	production_ordre_fabrication search 
+-->
+	<record model="ir.ui.view" id="production_ordre_fabrication_search">
+		<field name="name">production.ordre.fabrication.search</field>
+		<field name="model">production.ordre.fabrication</field>
+		<field name="arch" type="xml">
+			<search string="OF">
+				<field name="code_of" string="Code OF"/>
+				<field name="commande_id" string="Commande"/>
+				<field name="article_sortant" string="Article sortant"/>
+				<field name="code_machine" string="Code machine"
+					filter_domain="['|', ('code_machine.code_machine', 'ilike', self), ('code_machine.nom', 'ilike', self)]"/>
+				<field name="code_operateur" string="Code operateur" 
+					filter_domain="['|', ('code_operateur.prenom', 'ilike', self), ('code_operateur.nom', 'ilike', self)]"/>
+
+				<filter name="pour_stock" string="Pour stock" domain="[('commande_id', '=', False)]"/>
+				<separator/>
+				<filter name="pour_commande" string="Pour commande" domain="[('commande_id', '!=', False)]"/>
+				<separator/>
+				<filter name="of_pret" string="OF_Prêt_à_fabriquer" domain="[('article_entree_exist' , '=' , True)]" />
+
+				<group string="Par mois">
+					<filter string="Ce Mois" name="current_month" 
+						domain="[('date_debut','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+								 ('date_debut','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+					<filter string="Mois dernier" name="prev_month" 
+						domain="[('date_debut','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+								 ('date_debut','&lt;',time.strftime('%%Y-%%m-01'))]"/>
+				</group>
+				<newline/>
+				<group string="Par Etat">
+					<filter string="Terminé" domain="[('state','=','termine')]"/>
+					<filter string="Planifié" name="planifie" domain="[('state', '=', 'planifie')]"/>
+					<filter string="Démarré" name="demarre" domain="[('state', '=', 'demarre')]"/>
+				</group>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Article_Sortant" domain="[]" context="{'group_by':'article_sortant'}" />
+					<filter string="Machine" domain="[]" context="{'group_by':'code_machine'}" />
+					<filter string="Operateur" domain="[]" context="{'group_by':'code_operateur'}" />
+					<filter string="Etat" domain="[]" context="{'group_by':'state'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+<!-- 
+	production_bon_entree_fabrication search 
+-->
+	<record model="ir.ui.view" id="production_bon_entree_fabrication_search">
+		<field name="name">production.bon.entree.fabrication.search</field>
+		<field name="model">production.bon.entree.fabrication</field>
+		<field name="arch" type="xml">
+			<search string="Bon entree fabrication">
+				<field name="code_of" string="Code OF" filter_domain="[('code_of.code_of', 'ilike', self)]"/>
+				<filter string="OF_Non_Terminé" name="of_non_termine" domain="[('code_of.state','in',('demarre','planifie'))]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="OF" domain="[]" context="{'group_by':'code_of'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	bon_reservation_ordre_fabrication search 
+-->
+	<record model="ir.ui.view" id="bon_reservation_ordre_fabrication_search">
+		<field name="name">bon.reservation.ordre.fabrication.search</field>
+		<field name="model">bon.reservation.ordre.fabrication</field>
+		<field name="arch" type="xml">
+			<search string="Bon reservation OF">
+				<field name="ordre_fabrication_id" string="Code OF" 
+					filter_domain="[('ordre_fabrication_id.code_of', 'ilike', self)]"/>
+				
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="OF" domain="[]" context="{'group_by':'ordre_fabrication_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	production_operateur search 
+-->
+	<record model="ir.ui.view" id="production_operateur_search">
+		<field name="name">production.operateur.search</field>
+		<field name="model">production.operateur</field>
+		<field name="arch" type="xml">
+			<search string="Operateur">
+				<field name="code_operateur" string="Code"/>
+				<field name="nom" string="Nom"/>
+				<field name="prenom" string="Prenom"/>
+				<filter name="filter_see_all" string="Tout" domain="['|', ('active', '=',True), ('active', '=',False)]" />
+				<separator/>
+				<filter name="filter_see_active" string="Active" domain="[('active', '=',True)]" />
+ 				<filter name="filter_see_inactive" string="Inactive" domain="[('active', '=',False)]" />
+			</search>
+		</field>
+	</record>
+<!-- 
+	production_machine search 
+-->
+	<record model="ir.ui.view" id="production_machine_search">
+		<field name="name">production.machine.search</field>
+		<field name="model">production.machine</field>
+		<field name="arch" type="xml">
+			<search string="Machine">
+				<field name="code_machine" string="Code"/>
+				<field name="nom" string="Nom"/>
+				<filter name="filter_see_all" string="Tout" domain="['|', ('active', '=',True), ('active', '=',False)]" />
+				<separator/>
+  				<filter name="filter_see_active" string="Active" domain="[('active', '=',True)]" />
+				<filter name="filter_see_inactive" string="Inactive" domain="[('active', '=',False)]" />
+			</search>
+		</field>
+	</record>
+
+<!--
+________KANBAN__________________________________________________________________________________________
+
+-->
+<!-- 
+	production_activite kanban 
+-->
+	<record model="ir.ui.view" id="production_activite_kanban_view">
+		<field name="name">production.activite</field>
+		<field name="model">production.activite</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban>
+				<templates>
+					<t t-name="kanban-box">
+						<div class="oe_activite_vignette">
+							<div class="oe_activite_image">
+								<a type="open">
+									<img t-att-src="kanban_image('production.activite', 'image_medium', record.id.value)" 
+										class="oe_activite_picture"/></a>
+							</div>
+
+							<div class="oe_activite_details">
+								<h4>
+									<a type="open"><field name="nom_activite"/></a>
+								</h4>
+								<br/>
+								<ul>
+									<li></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+<!-- 
+	production_machine kanban 
+-->
+	<record model="ir.ui.view" id="production_machine_kanban_view">
+		<field name="name">production.machine</field>
+		<field name="model">production.machine</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban>
+				<templates>
+					<t t-name="kanban-box">
+						<div class="oe_activite_vignette">
+							<div class="oe_activite_image">
+								<a type="open">
+									<img t-att-src="kanban_image('production.machine', 'image_medium', record.id.value)" 
+										class="oe_activite_picture"/></a>
+							</div>
+							<div class="oe_activite_details">
+								<h4>
+									<a type="open"><field name="code_machine"/></a>
+								</h4>
+								<br/>
+								<ul>
+									<li><b>Nom : </b><field name="nom"/></li>
+									<li><b>Année : </b><field name="annee_debut_production"/></li>
+									<li><b>Durée (heure): </b><field name="duree_fonctionnement" widget="float_time"/></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+<!-- 
+	production_operateur kanban 
+-->
+	<record model="ir.ui.view" id="production_operateur_kanban_view">
+		<field name="name">production.operateur</field>
+		<field name="model">production.operateur</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban>
+				<templates>
+					<t t-name="kanban-box">
+						<div class="oe_activite_vignette">
+							<div class="oe_activite_image">
+								<a type="open">
+									<img t-att-src="kanban_image('production.operateur', 'image_medium', record.id.value)" 
+										class="oe_activite_picture"/></a>
+							</div>
+							<div class="oe_activite_details">
+								<h4>
+									<a type="open"><field name="code_operateur"/></a>
+								</h4>
+								<br/>
+								<ul>
+									<li><b>Nom : </b><field name="prenom"/> <field name="nom"/></li>
+									<li><b>Tél : </b><field name="tel"/></li>
+									<li><b>Email : </b><field name="email"/></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+<!-- 
+	production_famille kanban 
+-->
+	<record model="ir.ui.view" id="production_famille_kanban_view">
+		<field name="name">production.famille</field>
+		<field name="model">production.famille</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban>
+				<templates>
+					<t t-name="kanban-box">
+						<div class="oe_activite_vignette">
+							<div class="oe_activite_image">
+								<a type="open">
+									<img t-att-src="kanban_image('production.famille', 'image_medium', record.id.value)" 
+										class="oe_activite_picture"/></a>
+							</div>
+							<div class="oe_activite_details">
+								<h4>
+									<a type="open"><field name="catdescription"/></a>
+								</h4>
+								<br/>
+								<ul>
+									<li></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+<!-- 
+	production_ordre_fabrication kanban 
+-->
+	<record model="ir.ui.view" id="production_ordre_fabrication_kanban_view">
+		<field name="name">production.ordre.fabrication</field>
+		<field name="model">production.ordre.fabrication</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban class="oe_background_grey" default_order="date_fin">
+	    		<field name="member_color"/>
+				<field name="state"/>
+				<templates>
+					<t t-name="kanban-box">
+						<div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.member_color.raw_value)} oe_kanban_card oe_kanban_global_click">
+							<div class="oe_of_details">
+								<table width="100%">
+									<tr>
+										<td><h4>OF : <a type="open"><field name="code_of"/></a></h4></td>
+										<td style="text-align:center;"><b><u><field name="state"/></u></b></td>
+										<td style="text-align: right;"><b>du : </b><field name="date_debut"/></td>
+									</tr>
+									<tr style="border-bottom:1pt solid black;">
+										<td><b>CMD : </b><field name="commande_id"/></td>
+										<td style="text-align: right;"><b>au : </b><field name="date_fin"/></td>
+									</tr>
+								</table>  
+								<ul>
+									<li><b>Machine : </b><field name="code_machine"/></li>
+									<li><b>Opérateur : </b><field name="code_operateur"/></li>
+									<li><b>Production : </b><field name="quantite"/>
+															(<field name="unite_article_sortant"/>) 
+															de <field name="article_sortant"/></li>
+								</ul>
+								<div class="oe_kanban_bottom">
+									<div class="bottom_left">
+										<field name="progress" widget="gauge" style="width:150px; height: 110px;" 
+											class="pull-left"
+				       						options="{'levelcolors': ['#a9d70b', '#f9c802', '#ff0000'], 'action_jump': '357'}">progression</field>
+			    					</div>
+			    					<div class="bottom_right">
+
+										<button name="%(production.report_production_of)d" icon="gtk-print"
+											type="action" string="Imprimer" class="oe_kanban_button"/>
+										<button name="ajouter_bon_entree_fabrication" icon="gtk-add" states="demarre"
+											type="object" string="Bon entree fabrication" class="oe_kanban_button"/>
+										<button name="action_demarrer_fabrication" string="Démarrer" states="planifie"
+											type="object" icon="STOCK_GO_FORWARD" class="oe_kanban_button">
+										</button>
+										<button name="action_terminer_fabrication" states="demarre" icon="STOCK_APPLY"
+											type="object" string="Terminer" class="oe_kanban_button"/>
+			       						<button name="action_arreter_fabrication"  states="demarre" icon="STOCK_CANCEL"
+											type="object" string="Arrêter" class="oe_kanban_button"
+											confirm="Voulez vous arrêter cette OF?"/>
+			    					</div>
+								</div>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+<!-- 
+	color_status kanban 
+-->
+	<record model="ir.ui.view" id="color_status_kanban_view">
+		<field name="name">color.status</field>
+		<field name="model">color.status</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban create="false" class="oe_background_grey">
+				<field name="color"/>
+				<templates>
+					<t t-name="kanban-box">
+						<div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card">
+							<div class="oe_color_status_details">
+								<h4  align="center">
+									<field name="state"/>
+								</h4>
+								<br/>
+								<ul>
+									<li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+								</ul>
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+<!--
+________ACTION__________________________________________________________________________________________
+
+-->
+<!-- production_famille Action -->
+	<record model="ir.actions.act_window" id="action_production_famille">
+		<field name="name">Familles</field>
+		<field name="res_model">production.famille</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+	</record>
+
+<!-- production_activite Action -->
+	<record model="ir.actions.act_window" id="action_production_activite">
+		<field name="name">Activites</field>
+		<field name="res_model">production.activite</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+	</record>
+
+<!-- production_article Action -->
+	<record model="ir.actions.act_window" id="action_production_article">
+		<field name="name">Articles</field>
+		<field name="res_model">production.article</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="production_article_search"/>
+	</record>
+
+<!-- production_operateur Action -->
+	<record model="ir.actions.act_window" id="action_production_operateur">
+		<field name="name">Operateurs</field>
+		<field name="res_model">production.operateur</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="search_view_id" ref="production_operateur_search"/>
+	</record>
+
+<!-- production_machine Action -->
+	<record model="ir.actions.act_window" id="action_production_machine">
+		<field name="name">Machines</field>
+		<field name="res_model">production.machine</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="search_view_id" ref="production_machine_search"/>
+	</record>
+
+<!-- production_ordre_fabrication Action -->
+	<record model="ir.actions.act_window" id="action_production_ordre_fabrication">
+		<field name="name">Ordres de Fabrication</field>
+		<field name="res_model">production.ordre.fabrication</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form,calendar,gantt</field>
+		<field name="search_view_id" ref="production_ordre_fabrication_search"/>
+		<field name="context">{'search_default_planifie': 1, 'search_default_demarre': 1}</field>
+	</record>
+
+<!-- production_bon_entree_fabrication Action -->
+	<record model="ir.actions.act_window" id="action_production_bon_entree_fabrication">
+		<field name="name">Bon d'Entree de Fabrication</field>
+		<field name="res_model">production.bon.entree.fabrication</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="production_bon_entree_fabrication_search"/>
+		<field name="context">{'search_default_of_non_termine': 1}</field>
+	</record>
+	<record id="view_action_production_bon_entree_fabrication_tree" model="ir.actions.act_window.view">
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="production_bon_entree_fabrication_tree" />
+		<field name="act_window_id" ref="action_production_bon_entree_fabrication" />
+	</record>
+	<record id="view_action_production_bon_entree_fabrication_form" model="ir.actions.act_window.view">
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="production_bon_entree_fabrication_form" />
+		<field name="act_window_id" ref="action_production_bon_entree_fabrication" />
+	</record>
+
+<!-- bon_reservation_ordre_fabrication Action -->
+	<record model="ir.actions.act_window" id="action_bon_reservation_ordre_fabrication">
+		<field name="name">Bons de Réservation pour OF</field>
+		<field name="res_model">bon.reservation.ordre.fabrication</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		
+	</record>
+
+<!-- color_status Action -->
+    <record model="ir.actions.act_window" id="action_color_status">
+        <field name="name">Color</field>
+        <field name="res_model">color.status</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban</field>
+        <field name="search_view_id" ref="color_status_search"/>
+        <field name="context">{'search_default_etat_par_objet': 1}</field>
+    </record>
+
+<!-- production_zone_stockage Action -->
+    <record model="ir.actions.act_window" id="action_production_zone_stockage">
+        <field name="name">Zone de stockage</field>
+        <field name="res_model">production.zone.stockage</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+   <!--
+	<menuitem name="Gestion de la production" id="production_menu" groups="production.group_production"/>
+
+		<menuitem name="Production" id="production_main_menu" parent="production_menu" sequence="1"/>
+			<menuitem name="Activités" id="production_activite_menu_item" parent="production_main_menu" 
+				action="action_production_activite" sequence="1"/>
+			<menuitem name="Opérateurs" id="production_operateur_menu_item" parent="production_main_menu" 
+				action="action_production_operateur" sequence="2"/>
+			<menuitem name="Commandes" id="commande_client_menu_item" parent="production_main_menu" 
+				action="production.action_production_commande" sequence="3"/>
+			<menuitem name="Ordres de fabrication" id="production_ordre_fabrication_menu_item" parent="production_main_menu"
+				action="action_production_ordre_fabrication" sequence="4"/>
+			<menuitem name="Bons entrées fabrication" id="production_bon_entree_fabrication_menu_item" 
+				parent="production_main_menu" action="action_production_bon_entree_fabrication" sequence="3"/>
+-->
+
+<!--
+			<menuitem name="Bons de Réservation" id="production_bon_reservation_menu_item" 
+				parent="production_main_menu" action="action_bon_reservation_ordre_fabrication" sequence="4"/>
+-->
+
+<!--
+		<menuitem name="Ressources" id="ressource_main_menu" parent="production_menu" sequence="5"/>
+			<menuitem name="Familles" id="production_famille_menu_item" parent="ressource_main_menu" 
+				action="action_production_famille" sequence="4"/>
+			<menuitem name="Articles" id="production_article_menu_item" parent="ressource_main_menu" 
+				action="action_production_article" sequence="5"/>
+			<menuitem name="Machines" id="production_machine_menu_item" parent="ressource_main_menu" 
+				action="action_production_machine" sequence="2"/>
+
+		<menuitem name="Configuration" id="configuration_main_menu" parent="production_menu" groups="production.group_admin"/>
+			<menuitem name="Couleurs des états" id="color_status_menu_item" parent="configuration_main_menu" 
+				action="action_color_status" sequence="40"/>
+			<menuitem name="Zone de stockage" id="zone_stockage_menu_item" parent="configuration_main_menu" 
+				action="action_production_zone_stockage" sequence="41"/>
+     -->             
+    </data>
+</openerp>

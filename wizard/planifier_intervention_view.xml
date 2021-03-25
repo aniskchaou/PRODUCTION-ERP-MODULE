@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		
+        <record id="view_planifier_intervention" model="ir.ui.view">
+            <field name="name">Planifier intervention</field>
+            <field name="model">planifier.intervention</field>
+            <field name="arch" type="xml">
+                <form string="Planifier intervention">
+                    <group>
+						<field name="type_prestataire"/>
+						<field name="prestataire_id" 
+							attrs="{'invisible': [('type_prestataire', '=', 'interne')], 'required': [('type_prestataire','=', 'externe')]}"/>
+						<field name="operateur_id" 
+							attrs="{'invisible': [('type_prestataire', '=', 'externe')], 'required': [('type_prestataire','=', 'interne')]}"/>
+						<field name="date_entretien_planifie"/>
+                    </group>
+                    <footer>
+                        <button name="planifier_intervention" string="Planifier" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Annuler" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+		<record id="action_view_planifier_intervention" model="ir.actions.act_window">
+			<field name="name">Planifier intervention</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">planifier.intervention</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_planifier_intervention"/>
+			<field name="target">new</field>
+		</record>
+
+	</data>
+</openerp>
+

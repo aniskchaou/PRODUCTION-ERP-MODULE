@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+		<!-- Activite source -->
+		<record model="production.activite" id="production_activite_laminage">
+			<field name="nom_activite">Laminage</field>
+			<field name="image" type="base64" file="production/static/img/laminage.png"/>
+		</record>
+		<record model="production.activite" id="production_activite_faconnage">
+			<field name="nom_activite">Façonnage</field>
+			<field name="image" type="base64" file="production/static/img/faconnage.jpg"/>
+		</record>
+		<record model="production.activite" id="production_activite_soudage">
+			<field name="nom_activite">Soudage</field>
+			<field name="image" type="base64" file="production/static/img/soudage.jpg"/>
+		</record>
+		<record model="production.activite" id="production_activite_pliage">
+			<field name="nom_activite">Pliage et coupe</field>
+			<field name="image" type="base64" file="production/static/img/pliage-coupe.jpg"/>
+		</record>
+
+		<!-- sequence Famille -->
+		<record id="sequence_production_famille_type" model="ir.sequence.type">
+			<field name="name">Production famille</field>
+			<field name="code">production.famille</field>
+		</record>
+        
+		<record id="sequence_production_famille" model="ir.sequence">
+			<field name="name">Production famille</field>
+			<field name="code">production.famille</field>
+			<field name="prefix"></field>
+			<field name="padding">3</field>
+		</record>
+
+		<!-- Famille Source -->
+		<record model="production.famille" id="production_famille_treillis_soudes">
+			<field name="catdescription">Treillis soudés</field>
+			<field name="unite">u</field>
+			<field name="image" type="base64" file="production/static/img/treillis-soudes.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_fil_trefile">
+			<field name="catdescription">Fil tréfilé</field>
+			<field name="unite">kg</field>
+			<field name="image" type="base64" file="production/static/img/fil-trefile.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_fil_crante">
+			<field name="catdescription">Fil cranté</field>
+			<field name="unite">u</field>
+			<field name="image" type="base64" file="production/static/img/fil-crante.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_barres_dressees_coupees">
+			<field name="catdescription">Barres dressées coupées</field>
+			<field name="unite">kg</field>
+			<field name="image" type="base64" file="production/static/img/barres-dressees-coupees.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_fil_machine">
+			<field name="catdescription">Fil machine</field>
+			<field name="unite">kg</field>
+			<field name="image" type="base64" file="production/static/img/fil-machine.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_cadre">
+			<field name="catdescription">Cadre</field>
+			<field name="unite">u</field>
+			<field name="image" type="base64" file="production/static/img/cadre.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_etrier">
+			<field name="catdescription">Etrier</field>
+			<field name="unite">kg</field>
+			<field name="image" type="base64" file="production/static/img/etrier.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_spirale">
+			<field name="catdescription">Spirale</field>
+			<field name="unite">m</field>
+			<field name="image" type="base64" file="production/static/img/spirale.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_poutrelle">
+			<field name="catdescription">Poutrelle</field>
+			<field name="unite">m</field>
+			<field name="image" type="base64" file="production/static/img/poutrelle.jpg"/>
+		</record>
+		<record model="production.famille" id="production_famille_fil_galvanise">
+			<field name="catdescription">Fil galvanisé</field>
+			<field name="unite">kg</field>
+			<field name="image" type="base64" file="production/static/img/fil-galvanise.jpg"/>
+		</record>
+
+		<!-- sequence OF-->
+		<record id="sequence_production_ordre_fabrication_type" model="ir.sequence.type">
+			<field name="name">Production ordre fabrication</field>
+			<field name="code">production.ordre.fabrication</field>
+		</record>
+        
+		<record id="sequence_production_ordre_fabrication" model="ir.sequence">
+			<field name="name">Production ordre fabrication</field>
+			<field name="code">production.ordre.fabrication</field>
+			<field name="prefix"></field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- sequence Bon Entree Fabrication-->
+		<record id="sequence_production_bon_entree_fabrication_type" model="ir.sequence.type">
+			<field name="name">Production bon entree fabrication</field>
+			<field name="code">production.bon.entree.fab</field>
+		</record>
+        
+		<record id="sequence_production_bon_entree_fabrication" model="ir.sequence">
+			<field name="name">Production bon entree fabrication</field>
+			<field name="code">production.bon.entree.fab</field>
+			<field name="prefix"></field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- sequence Bon reservation pour of-->
+		<record id="sequence_bon_reservation_ordre_fabrication_type" model="ir.sequence.type">
+			<field name="name">Production bon reservation</field>
+			<field name="code">bon.reservation.of</field>
+		</record>
+        
+		<record id="sequence_bon_reservation_ordre_fabrication" model="ir.sequence">
+			<field name="name">Production bon reservation</field>
+			<field name="code">bon.reservation.of</field>
+			<field name="prefix"></field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- color_status Source -->
+		<record model="color.status" id="color_status_planifie">
+			<field name="state">planifie</field>
+			<field name="objet">ordre_fabrication</field>
+			<field name="color">0</field>
+		</record>
+		<record model="color.status" id="color_status_demarre">
+			<field name="state">demarre</field>
+			<field name="objet">ordre_fabrication</field>
+			<field name="color">2</field>
+		</record>
+		<record model="color.status" id="color_status_termine">
+			<field name="state">termine</field>
+			<field name="objet">ordre_fabrication</field>
+			<field name="color">7</field>
+		</record>
+
+		<record model="color.status" id="color_status_planifie_cmd">
+			<field name="state">planifie</field>
+			<field name="objet">commande_client</field>
+			<field name="color">0</field>
+		</record>
+		<record model="color.status" id="color_status_demarre_cmd">
+			<field name="state">demarre</field>
+			<field name="objet">commande_client</field>
+			<field name="color">2</field>
+		</record>
+		<record model="color.status" id="color_status_termine_cmd">
+			<field name="state">termine</field>
+			<field name="objet">commande_client</field>
+			<field name="color">7</field>
+		</record>
+
+		<record model="color.status" id="color_status_brouillon">
+			<field name="state">brouillon</field>
+			<field name="objet">commande_fournisseur</field>
+			<field name="color">0</field>
+		</record>
+		<record model="color.status" id="color_status_annulee">
+			<field name="state">annulee</field>
+			<field name="objet">commande_fournisseur</field>
+			<field name="color">1</field>
+		</record>
+		<record model="color.status" id="color_status_attente">
+			<field name="state">attente</field>
+			<field name="objet">commande_fournisseur</field>
+			<field name="color">2</field>
+		</record>
+		<record model="color.status" id="color_status_recu_partiel">
+			<field name="state">recu_partiel</field>
+			<field name="objet">commande_fournisseur</field>
+			<field name="color">6</field>
+		</record>
+		<record model="color.status" id="color_status_recu_total">
+			<field name="state">recu_total</field>
+			<field name="objet">commande_fournisseur</field>
+			<field name="color">7</field>
+		</record>
+
+	</data>
+</openerp>

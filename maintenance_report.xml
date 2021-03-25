@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+
+		<!-- report intervention-->
+		<record id="report_maintenance_intervention" model="ir.actions.report.xml">
+			<field name="name">Demande d'intervention</field>
+			<field name="auto">True</field>
+			<field name="type">ir.actions.report.xml</field>
+			<field name="model">maintenance.demande.intervention</field>
+			<field name="jasper_model_id" ref="production.model_maintenance_demande_intervention"/>
+			<field name="report_name">Demande d'intervention</field>
+			<field name="report_type">pdf</field>
+			<field name="jasper_report">True</field>
+			<field name="jasper_output">pdf</field>
+		</record>
+
+		<record id="report_maintenance_intervention_file" model="ir.actions.report.xml.file">
+			<field name="report_id" ref="report_maintenance_intervention"/>
+			<field name="file" type="base64" file="production/report/reportInter.jrxml"/>
+			<field name="filename">reportInter.jrxml</field>
+			<field name="default" eval="True"/>
+		</record>
+
+	</data>
+</openerp>
+
+
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+
+		<!-- sequence Bon reservation-->
+		<record id="sequence_bon_reservation_type" model="ir.sequence.type">
+			<field name="name">Bon de reservation</field>
+			<field name="code">bon.reservation</field>
+		</record>
+        
+		<record id="sequence_bon_reservation" model="ir.sequence">
+			<field name="name">Bon de reservation</field>
+			<field name="code">bon.reservation</field>
+			<field name="prefix"></field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- sequence Bon livraison-->
+		<record id="sequence_bon_livraison_type" model="ir.sequence.type">
+			<field name="name">Bon de livraison</field>
+			<field name="code">bon.livraison</field>
+		</record>
+        
+		<record id="sequence_bon_livraison" model="ir.sequence">
+			<field name="name">Bon de livraison</field>
+			<field name="code">bon.livraison</field>
+			<field name="prefix"></field>
+			<field name="padding">6</field>
+		</record>
+
+		<!-- taux_tva Source -->
+		<record model="taux.tva" id="taux_tva_0">
+			<field name="taux_tva" eval="0"/>
+			<field name="default" eval="False"/>
+		</record>
+		<record model="taux.tva" id="taux_tva_18">
+			<field name="taux_tva" eval="18"/>
+			<field name="default" eval="False"/>
+		</record>
+		<record model="taux.tva" id="taux_tva_22_5">
+			<field name="taux_tva" eval="22.5"/>
+			<field name="default" eval="False"/>
+		</record>
+
+	</data>
+</openerp>

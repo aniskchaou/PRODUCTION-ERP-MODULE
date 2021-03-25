@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+        <record id="view_traiter_intervention_interne" model="ir.ui.view">
+            <field name="name">Traiter intervention</field>
+            <field name="model">traiter.intervention</field>
+            <field name="arch" type="xml">
+                <form string="Traiter intervention">
+					<group>
+						<group>
+							<field name="demande_intervention_id" invisible="1"/>
+							<field name="date_entretien" required="1"/>
+							<field name="date_fin_entretien" required="1"/>
+						</group>
+						<group>
+							<field name="montant_facture" required="1"/>
+							<field name="temp_arret"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Traitement effectué">
+							<field name="traitement_effectue" required="1"/>
+						</page>
+						<page string="Pièces de rechange">
+							<field name="demande_intervention_piece_rel_ids">
+								<tree editable="bottom">
+									<field name="piece_id"/>
+									<field name="quantite"/>
+									<field name="unite"/>
+									<field name="date"/>
+									<field name="prix"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+                    <footer>
+                        <button name="traiter_intervention" string="Traiter" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Annuler" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+		<record id="action_view_traiter_intervention_interne" model="ir.actions.act_window">
+			<field name="name">Traiter intervention</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">traiter.intervention</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_traiter_intervention_interne"/>
+			<field name="context">{'default_demande_intervention_id': context.get('demande_intervention_id', False),}</field>
+			<field name="target">new</field>
+		</record>
+
+	</data>
+</openerp>
+

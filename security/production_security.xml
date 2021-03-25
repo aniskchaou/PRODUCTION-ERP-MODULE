@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record model="ir.module.category" id="iit_category">
+			<field name="name">Production</field>
+			<field name="sequence">15</field>
+		</record>
+       
+
+       <record model="base.language.install" id="install_fr">
+        <field name="lang">fr_FR</field>
+        <field name="state">done</field>
+        <field name="overwrite" eval="1"/>
+         </record>
+		
+
+		<record id="res_users_mohamed" model="res.users">
+			<field name="password">mohamed</field>
+			<field name="login">mohamed</field>
+			<field name="name">Mohamed Triki</field>
+			<field name="company_id" ref="base.main_company"/>
+			
+			<field name="active" eval="1"/>
+		</record>
+
+		<record id="res_users_amin" model="res.users">
+			<field name="password">amin</field>
+			<field name="login">amin</field>
+			<field name="name">Amin Drira</field>
+			<field name="company_id" ref="base.main_company"/>
+			
+			<field name="active" eval="1"/>
+		</record>
+
+		<record id="res_users_lotfi" model="res.users">
+			<field name="password">lotfi</field>
+			<field name="login">lotfi</field>
+			<field name="name">Lotfi Maalej</field>
+			<field name="company_id" ref="base.main_company"/>
+			
+			<field name="active" eval="1"/>
+		</record>
+
+		<record id="res_users_ali" model="res.users">
+			<field name="password">ali</field>
+			<field name="login">ali</field>
+			<field name="name">Ali Sellami</field>
+			<field name="company_id" ref="base.main_company"/>
+		
+			<field name="active" eval="1"/>
+		</record>
+
+
+		<record id="res_users_adib" model="res.users">
+			<field name="password">adib</field>
+			<field name="login">adib</field>
+			<field name="name">Adib Regaieg</field>
+			<field name="company_id" ref="base.main_company"/>
+			
+			<field name="active" eval="1"/>
+		</record>
+
+
+		<record id="group_admin" model="res.groups">
+			<field name="name">Groupe admin</field>
+			<field name="category_id" ref="iit_category"/>
+			<field name="users" eval="[(6,0,[ref('base.user_root')])]"/>
+		</record>
+
+		<record id="group_production" model="res.groups">
+			<field name="name">Groupe production</field>
+			<field name="category_id" ref="iit_category"/>
+			<field name="users" eval="[(6,0,[ref('res_users_lotfi'), ref('base.user_root')])]"/>
+		</record>
+
+		<record id="group_vente" model="res.groups">
+			<field name="name">Groupe vente</field>
+			<field name="category_id" ref="iit_category"/>
+			<field name="users" eval="[(6,0,[ref('res_users_amin'), ref('base.user_root')])]"/>
+		</record>
+
+		<record id="group_achat" model="res.groups">
+			<field name="name">Groupe achat</field>
+			<field name="category_id" ref="iit_category"/>
+			<field name="users" eval="[(6,0,[ref('res_users_mohamed'), ref('base.user_root')])]"/>
+		</record>
+
+		<record id="group_maintenance" model="res.groups">
+			<field name="name">Groupe maintenance</field>
+			<field name="category_id" ref="iit_category"/>
+			<field name="users" eval="[(6,0,[ref('res_users_ali')])]"/>
+		</record>
+
+		<record id="group_responsable_maintenance" model="res.groups">
+			<field name="name">Groupe responsable maintenance</field>
+			<field name="category_id" ref="iit_category"/>
+			<field name="users" eval="[(6,0,[ref('res_users_adib'), ref('base.user_root')])]"/>
+		</record>
+
+	</data>
+</openerp>

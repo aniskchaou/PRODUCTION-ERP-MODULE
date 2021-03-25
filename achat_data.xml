@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+
+		<!-- sequence Bon Entree achat-->
+		<record id="sequence_bon_entree_achat_type" model="ir.sequence.type">
+			<field name="name">Bon entree achat</field>
+			<field name="code">bon.entree.achat</field>
+		</record>
+        
+		<record id="sequence_bon_entree_achat" model="ir.sequence">
+			<field name="name">Bon entree achat</field>
+			<field name="code">bon.entree.achat</field>
+			<field name="prefix"></field>
+			<field name="padding">6</field>
+		</record>
+
+	</data>
+</openerp>

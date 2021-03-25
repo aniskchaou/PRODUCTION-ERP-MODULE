@@ -1,0 +1,359 @@
+<?xml version="1.0" ?>
+
+<openerp>
+	<data>
+<!--
+________FORMS__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	bon_entree_achat Form 
+-->
+	<record model="ir.ui.view" id="bon_entree_achat_form">
+		<field name="name">bon.entree.achat.form</field>
+		<field name="model">bon.entree.achat</field>
+		<field name="arch" type="xml">
+			<form string="Bons Entrées Achat">
+				<sheet>
+                    <div style="text-align: center;">
+                        <h1>Bon entrée achat</h1>
+                    </div>
+                    <hr/>
+					<div class="oe_title">
+						<h1><label for="code_bon"/> <field name="code_bon" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="commande_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="article_id" options="{'no_create': True, 'no_open': True}"/>
+							<field name="quantite"/>
+						</group>
+						<group>
+							<field name="date_bon"/>
+						</group>
+					</group>
+					<label for="progress"/>
+					<div class="oe_right">
+						<h3>Livré / Commandé : (<field name="quantite_livre" class="oe_inline"/> / 
+												<field name="quantite_commande" class="oe_inline"/> 
+												<field name="unite" class="oe_inline"/>)</h3>
+					</div>
+
+					<field name="progress" widget="progressbar"/>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!-- 
+	article_commande_fournisseur_rel Form 
+-->
+	<record model="ir.ui.view" id="article_commande_fournisseur_rel_form">
+		<field name="name">article.commande.fournisseur.rel.form</field>
+		<field name="model">article.commande.fournisseur.rel</field>
+		<field name="arch" type="xml">
+			<form string="Ligne de commande">
+				<sheet>
+					<group>
+						<field name="commande_fournisseur_id" class="oe_inline" domain="[('state','=','brouillon')]"/>
+						<field name="article_id" class="oe_inline"/>
+						<field name="quantite"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!--
+	commande_fournisseur Form
+-->
+	<record model="ir.ui.view" id="commande_fournisseur_form">
+		<field name="name">commande.fournisseur.form</field>
+		<field name="model">commande.fournisseur</field>
+		<field name="arch" type="xml">
+			<form string="Commande fournisseur">
+				<header>
+					<button name="action_envoyer_commande" type="object" class="oe_highlight" 
+						string="Envoyer" states="brouillon"/>
+					<button name="action_cloturer_commande" type="object" class="oe_highlight" 
+						string="Cloturer" states="attente"/>
+					<button name="action_annuler_commande" type="object" class="oe_highlight" 
+						string="Annuler" states="attente"/>
+					<field name="state"  widget="statusbar" 
+						statusbar_visible="brouillon,attente"/>
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<h1><label for="code_commande"/> <field name="code_commande" class="oe_inline"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="fournisseur_id"/>
+						</group>
+						<group>
+							<field name="date_commande"/>
+						</group>
+					</group>
+					<label for="article_commande_fournisseur_ids"/>
+					<field name="article_commande_fournisseur_ids" >
+						<tree editable="bottom">
+							<field name="state" invisible='1'/>
+							<button name="ajouter_bon_entree_achat" string="Ajouter bon entrée achat"
+								class="oe_highlight" type="object" icon="STOCK_GO_DOWN"
+								attrs="{'invisible': [('state', '!=', 'attente')]}"/>
+							<field name="article_id"/>
+							<field name="quantite"/>
+							<field name="unite"/>
+							<field name="quantite_livre"/>
+							<field name="stock_reel"/>
+							<field name="stock_disponible"/>
+							<field name="stock_non_reserve"/>
+							<field name="progress" widget="progressbar"/>
+						</tree>
+					</field>
+					<separator/>
+					<label for="bon_entree_achat_ids"/>
+					<field name="bon_entree_achat_ids">
+						<tree create="false">
+							<field name="code_bon"/>
+							<field name="article_id"/>
+							<field name="quantite"/>
+							<field name="date_bon"/>
+						</tree>
+					</field>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+
+<!-- 
+	demande_achat Form 
+-->
+	<record model="ir.ui.view" id="demande_achat_form">
+		<field name="name">demande.achat.form</field>
+		<field name="model">demande.achat</field>
+		<field name="arch" type="xml">
+			<form string="Demande d'achat">
+				<sheet>
+					<group>
+						<group>
+							<field name="article_id"/>
+							<field name="quantite_demande"/>
+						</group>
+						<group>
+							<field name="date_demande"/>
+							<field name="demandeur"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+<!--
+________TREES__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	bon_entree_achat Tree 
+-->
+	<record model="ir.ui.view" id="bon_entree_achat_tree">
+		<field name="name">bon.entree.achat.tree</field>
+		<field name="model">bon.entree.achat</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Bon entrée Achat" >
+				<field name="code_bon"/>
+				<field name="commande_id"/>
+				<field name="article_id"/>
+				<field name="quantite"/>
+				<field name="date_bon"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	commande_fournisseur Tree 
+-->
+	<record model="ir.ui.view" id="commande_fournisseur_tree">
+		<field name="name">commande.fournisseur.tree</field>
+		<field name="model">commande.fournisseur</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree colors="blue:state in ('brouillon');red:state in ('annulee');green:state in ('attente');black:state in ('termine');DimGray:state in ('recu_partiel');Black:state in ('recu_total')" 
+				string="Commande fournisseur">
+				<field name="code_commande"/>
+				<field name="date_commande"/>
+				<field name="fournisseur_id"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+<!-- 
+	demande_achat Tree 
+-->
+	<record model="ir.ui.view" id="demande_achat_tree">
+		<field name="name">demande.achat.tree</field>
+		<field name="model">demande.achat</field>
+		<field name="type">tree</field>
+		<field name="arch" type="xml">
+			<tree string="Demande Achat" >
+				<field name="article_id"/>
+				<field name="quantite_demande"/>
+			</tree>
+		</field>
+	</record>
+
+<!--
+________SEARCH__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	commande_fournisseur search 
+-->
+	<record model="ir.ui.view" id="commande_fournisseur_search">
+		<field name="name">commande.fournisseur.search</field>
+		<field name="model">commande.fournisseur</field>
+		<field name="arch" type="xml">
+			<search string="Commande fournisseur">
+				<field name="fournisseur_id" string="Fournisseur"/>
+				<filter string="En attente de réception" name="en_attente_de_reception" domain="[('state', '=', 'attente')]"/>
+				<filter string="Brouillon" name="brouillon" domain="[('state', '=', 'brouillon')]"/>
+				<filter string="Annulée" name="annulee" domain="[('state', '=', 'annulee')]"/>
+				<filter string="Reçu partiellemet" name="recu_partiel" domain="[('state', '=', 'recu_partiel')]"/>
+				<filter string="Reçu totalemet" name="recu_total" domain="[('state', '=', 'recu_total')]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Fournisseur" domain="[]" context="{'group_by':'fournisseur_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!-- 
+	bon_entree_achat search 
+-->
+	<record model="ir.ui.view" id="bon_entree_achat_search">
+		<field name="name">bon.entree.achat.search</field>
+		<field name="model">bon.entree.achat</field>
+		<field name="arch" type="xml">
+			<search string="Bon entree achat">
+				<field name="commande_id" string="Code commande" filter_domain="[('commande_id.code_commande', 'ilike', self)]"/>
+				<filter string="En attente de réception" name="en_attente_de_reception" 
+					domain="[('commande_id.state', '=', 'attente')]"/>
+				<newline/>
+				<group string="grouper par ...">
+					<filter string="Commande" domain="[]" context="{'group_by':'commande_id'}"/>
+					<filter string="Article" domain="[]" context="{'group_by':'article_id'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+<!--
+________KANBAN__________________________________________________________________________________________
+
+-->
+
+<!-- 
+	commande_fournisseur kanban 
+-->
+	<record model="ir.ui.view" id="commande_fournisseur_kanban_view">
+		<field name="name">commande.fournisseur</field>
+		<field name="model">commande.fournisseur</field>
+		<field name="type">kanban</field>
+		<field name="arch" type="xml">
+			<kanban class="oe_background_grey" default_order="date_commande">
+				<field name="member_color"/>
+				<field name="state"/>
+				<field name="article_commande_fournisseur_ids"/>
+				<templates>
+					<t t-name="kanban-box">
+						<div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.member_color.raw_value)} oe_kanban_card oe_kanban_global_click">
+							<div class="oe_cmd_details">
+								<table width="100%">
+									<tr>
+										<td><h4>Commande : <a type="open"><field name="code_commande"/></a></h4></td>
+										<td><u><field name="state"/></u></td>
+										<td style="text-align: right;"><b>depuis : </b><field name="date_commande"/></td>
+									</tr>
+									<tr>
+										<td><h4>Fournisseur <a type="open"><field name="fournisseur_id"/></a></h4></td>
+									</tr>
+								</table>  
+								<br/>
+								<table width="100%" class="table_kanban">
+									<tr>
+										<td><b>Article</b></td>
+										<td><b>Quantité</b></td>
+										<td><b>Unité</b></td>
+										<td style="text-align: right;"><b>Quantité livré</b></td>
+									</tr>
+									<t t-foreach="record.article_commande_fournisseur_ids.raw_value" t-as="commande">
+										<tr>
+											<td><t t-esc="commande.article_id"/></td>
+											<td><t t-esc="commande.quantite"/></td>
+											<td><t t-esc="commande.unite"/></td>
+											<td style="text-align: right;"><t t-esc="commande.quantite_livre"/>
+												( <u><b><t t-esc="commande.progress"/> %</b></u> )</td>
+										</tr>
+									</t>
+								</table>                            
+							</div>
+						</div>                     
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+
+<!--
+________ACTION__________________________________________________________________________________________
+
+-->
+
+<!-- bon_entree_achat Action -->
+	<record model="ir.actions.act_window" id="action_bon_entree_achat">
+		<field name="name">Bons Entrées Achat</field>
+		<field name="res_model">bon.entree.achat</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="context">{'search_default_en_attente_de_reception': 1}</field>
+	</record>
+
+<!-- commande_fournisseur Action -->
+	<record model="ir.actions.act_window" id="action_commande_fournisseur">
+		<field name="name">Commande fournisseur</field>
+		<field name="res_model">commande.fournisseur</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="context">{'search_default_en_attente_de_reception': 1, 'search_default_brouillon': 1}</field>
+	</record>
+
+<!-- commande_fournisseur Action -->
+	<record model="ir.actions.act_window" id="action_demande_achat">
+		<field name="name">Demande d'achat</field>
+		<field name="res_model">demande.achat</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+
+	<menuitem name="Achats" id="achat_menu" groups="production.group_achat"/>
+		<menuitem name="Achats" id="achat_main_menu" parent="achat_menu" sequence="2"/>
+			<menuitem name="Demande d'achat" id="demande_achat_menu_item" parent="achat_main_menu" 
+				action="action_demande_achat" sequence="1"/>
+			<menuitem name="Commande fournisseur" id="commande_fournisseur_menu_item" parent="achat_main_menu" 
+				action="action_commande_fournisseur" sequence="1"/>
+			<menuitem name="Bons entrées achat" id="bon_entree_achat_menu_item" parent="achat_main_menu" 
+				action="action_bon_entree_achat" sequence="2"/>
+
+    </data>
+</openerp>

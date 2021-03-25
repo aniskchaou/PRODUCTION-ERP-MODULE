@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		
+        <record id="view_select_famille" model="ir.ui.view">
+            <field name="name">select famille</field>
+            <field name="model">select.famille</field>
+            <field name="arch" type="xml">
+                <form string="Familles sortantes">
+                    <group>
+						<field name="activite_famille_sortant_ids" nolabel="1" widget="many2many_kanban">
+							<kanban quick_create="false" create="false" delete="false">
+								<field name="catdescription"/>
+								<templates>
+									<t t-name="kanban-box">
+										<div class="oe_activite_vignette">
+											<div class="oe_activite_details">
+											<a  type="object"  name="ajouter_of">
+												<img t-att-src="kanban_image('production.famille', 'image_medium', record.id.value)"/>
+											</a>
+											<h3><field name="catdescription"/></h3>
+											</div>
+										</div>  
+									</t>
+								</templates>
+							</kanban>
+						</field>
+                    </group>
+                    <footer>
+                        <button string="Annuler" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+		<record id="action_view_select_famille_sortant" model="ir.actions.act_window">
+			<field name="name">Familles sortantes</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">select.famille</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_select_famille"/>
+			<field name="context">{ 
+						'default_activite_famille_sortant_ids': context.get('activite_famille_sortant_ids', False),}</field>
+			<field name="target">new</field>
+		</record>
+
+	</data>
+</openerp>
+
